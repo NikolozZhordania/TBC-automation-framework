@@ -6,7 +6,7 @@
         <parameter name="browser" value="chromium"/>
         <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.ConsumerLoanCalculatorTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.ui.base.DeviceFactory"/>
         </classes>
     </test>
 
@@ -14,7 +14,7 @@
         <parameter name="browser" value="chromium"/>
         <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.CurrencyExchangeTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.ui.base.DeviceFactory"/>
         </classes>
     </test>
 
@@ -22,7 +22,7 @@
         <parameter name="browser" value="chromium"/>
         <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.LocationsCityFilterTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.ui.base.DeviceFactory"/>
         </classes>
     </test>
 
@@ -30,7 +30,7 @@
         <parameter name="browser" value="chromium"/>
         <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.LocationsTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.ui.base.DeviceFactory"/>
         </classes>
     </test>
 
@@ -38,7 +38,7 @@
         <parameter name="browser" value="chromium"/>
         <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.MoneyTransferTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.ui.base.DeviceFactory"/>
         </classes>
     </test>
 
@@ -47,7 +47,7 @@
         <parameter name="browser" value="firefox"/>
         <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.ConsumerLoanCalculatorTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.ui.base.DeviceFactory"/>
         </classes>
     </test>
 
@@ -55,7 +55,7 @@
         <parameter name="browser" value="firefox"/>
         <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.CurrencyExchangeTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.ui.base.DeviceFactory"/>
         </classes>
     </test>
 
@@ -63,7 +63,7 @@
         <parameter name="browser" value="firefox"/>
         <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.LocationsCityFilterTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.ui.base.DeviceFactory"/>
         </classes>
     </test>
 
@@ -71,7 +71,7 @@
         <parameter name="browser" value="firefox"/>
         <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.LocationsTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.ui.base.DeviceFactory"/>
         </classes>
     </test>
 
@@ -79,7 +79,7 @@
         <parameter name="browser" value="firefox"/>
         <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.MoneyTransferTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.ui.base.DeviceFactory"/>
         </classes>
     </test>
 
@@ -88,7 +88,7 @@
         <parameter name="browser" value="webkit"/>
         <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.ConsumerLoanCalculatorTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.ui.base.DeviceFactory"/>
         </classes>
     </test>
 
@@ -96,7 +96,7 @@
         <parameter name="browser" value="webkit"/>
         <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.CurrencyExchangeTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.ui.base.DeviceFactory"/>
         </classes>
     </test>
 
@@ -104,7 +104,7 @@
         <parameter name="browser" value="webkit"/>
         <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.LocationsCityFilterTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.ui.base.DeviceFactory"/>
         </classes>
     </test>
 
@@ -112,7 +112,7 @@
         <parameter name="browser" value="webkit"/>
         <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.LocationsTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.ui.base.DeviceFactory"/>
         </classes>
     </test>
 
@@ -120,7 +120,7 @@
         <parameter name="browser" value="webkit"/>
         <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.MoneyTransferTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.ui.base.DeviceFactory"/>
         </classes>
     </test>
 
