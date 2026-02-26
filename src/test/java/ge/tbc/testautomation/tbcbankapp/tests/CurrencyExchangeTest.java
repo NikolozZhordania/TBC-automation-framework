@@ -1,12 +1,20 @@
 package ge.tbc.testautomation.tbcbankapp.tests;
 
-import ge.tbc.testautomation.tbcbankapp.base.BaseTest;
+import ge.tbc.testautomation.tbcbankapp.base.BaseDeviceTest;
 import org.testng.annotations.Test;
 
 import static ge.tbc.testautomation.tbcbankapp.data.Constants.*;
 
 @Test(description = "DEV-T2 Verify Currency Conversion Rates")
-public class CurrencyExchangeTest extends BaseTest {
+public class CurrencyExchangeTest extends BaseDeviceTest {
+
+    public CurrencyExchangeTest(String device, String browser) {
+        super(device, browser);
+    }
+
+    public CurrencyExchangeTest(){
+        super();
+    }
 
     @Test(description = "DEV-T2 Step 1: Homepage access", priority = 1)
     public void homepageAccess() {

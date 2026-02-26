@@ -4,21 +4,23 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import ge.tbc.testautomation.tbcbankapp.pages.LocationsPage;
+import ge.tbc.testautomation.tbcbankapp.utils.LocationHelper;
 import org.json.JSONArray;
 
 import static ge.tbc.testautomation.tbcbankapp.data.Constants.LOCATIONS_PAGE_URL;
-import static ge.tbc.testautomation.tbcbankapp.utils.Utils.addressComponentExists;
-import static ge.tbc.testautomation.tbcbankapp.utils.Utils.getGeocodeResults;
+import static ge.tbc.testautomation.tbcbankapp.utils.GeoCodeUtils.addressComponentExists;
 import static org.testng.Assert.*;
 
 public class LocationSteps {
 
     private final Page page;
     private final LocationsPage locationsPage;
+    private final LocationHelper locationHelper;
 
     public LocationSteps(Page page) {
         this.page = page;
         this.locationsPage = new LocationsPage(page);
+        this.locationHelper = new LocationHelper(page);
     }
 
     public LocationSteps waitForLocationsPageToLoad() {
@@ -135,12 +137,8 @@ public class LocationSteps {
         return this;
     }
 
-    public int getATMListCount() {
-        return locationsPage.atmListItems.count();
-    }
-
     public LocationSteps verifyATMListIsNotEmpty() {
-        int count = getATMListCount();
+        int count = locationHelper.getATMListCount();
         assertTrue(count > 0,
                 "ATM list is empty. Expected at least 1 ATM");
         return this;
@@ -204,14 +202,9 @@ public class LocationSteps {
         return this;
     }
 
-    public String getATMHighlightClass(String atmName) {
-        Locator atmListItem = page.getByText(atmName);
-        Locator innerDiv = atmListItem.locator("xpath=ancestor::div[2]");
-        return innerDiv.getAttribute("class");
-    }
 
     public LocationSteps verifyATMHasActiveClass(String atmName) {
-        String classAttr = getATMHighlightClass(atmName);
+        String classAttr = locationHelper.getATMHighlightClass(atmName);
         assertNotNull(classAttr, "Class attribute is null for ATM: " + atmName);
         assertTrue(classAttr.contains("active"),
                 "ATM '" + atmName + "' does not have 'active' class. Found: " + classAttr);
@@ -236,25 +229,16 @@ public class LocationSteps {
         return this;
     }
 
-    public int getMapMarkerCount() {
-        return locationsPage.activeMapMarker.count();
-    }
-
     public LocationSteps verifyMapHasMarkers() {
-        int count = getMapMarkerCount();
+        int count = locationHelper.getMapMarkerCount();
         assertTrue(count > 0,
                 "No markers found on the map");
         return this;
     }
 
 
-    public JSONArray fetchGeocodeResults() {
-        waitForMapToUpdate();
-        return getGeocodeResults(page);
-    }
-
     public LocationSteps verifyStreetInGeocodeResults(String expectedStreet) {
-        JSONArray results = fetchGeocodeResults();
+        JSONArray results = locationHelper.fetchGeocodeResults();
         boolean streetFound = addressComponentExists(results, "route", expectedStreet);
 
         assertTrue(streetFound,
@@ -268,7 +252,7 @@ public class LocationSteps {
     }
 
     public LocationSteps verifyCityInGeocodeResults(String expectedCity) {
-        JSONArray results = fetchGeocodeResults();
+        JSONArray results = locationHelper.fetchGeocodeResults();
 
         boolean cityFound = addressComponentExists(results, "locality", expectedCity)
                 || addressComponentExists(results, "administrative_area_level_1", expectedCity);
@@ -280,13 +264,13 @@ public class LocationSteps {
     }
 
     public LocationSteps logATMListCount() {
-        int count = getATMListCount();
+        int count = locationHelper.getATMListCount();
         System.out.println("ATM list contains " + count + " items");
         return this;
     }
 
     public LocationSteps logMapMarkerCount() {
-        int count = getMapMarkerCount();
+        int count = locationHelper.getMapMarkerCount();
         System.out.println("Map has " + count + " markers");
         return this;
     }

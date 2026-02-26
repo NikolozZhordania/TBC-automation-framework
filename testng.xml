@@ -1,78 +1,126 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="TBC Bank UI - Staggered Parallel" parallel="tests" thread-count="2" preserve-order="true">
+<suite name="TBC Bank UI Enterprise" parallel="false" preserve-order="true" verbose="1">
 
-    <!-- Consumer Loan Calculator Test -->
-    <test name="ConsumerLoanCalculatorTest - Desktop">
-        <parameter name="device" value="desktop"/>
+    <!-- ================= CHROMIUM ================= -->
+    <test name="Chromium-ConsumerLoanCalculatorTest" parallel="instances" thread-count="2" preserve-order="true">
+        <parameter name="browser" value="chromium"/>
+        <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.ConsumerLoanCalculatorTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.tests.ConsumerLoanCalculatorTest"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
         </classes>
     </test>
 
-    <test name="ConsumerLoanCalculatorTest - Mobile">
-        <parameter name="device" value="mobile"/>
+    <test name="Chromium-CurrencyExchangeTest" parallel="instances" thread-count="2" preserve-order="true">
+        <parameter name="browser" value="chromium"/>
+        <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.CurrencyExchangeTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.tests.ConsumerLoanCalculatorTest"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
         </classes>
     </test>
 
-    <!-- Currency Exchange Test -->
-    <test name="CurrencyExchangeTest - Desktop">
-        <parameter name="device" value="desktop"/>
+    <test name="Chromium-LocationsCityFilterTest" parallel="instances" thread-count="2" preserve-order="true">
+        <parameter name="browser" value="chromium"/>
+        <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.LocationsCityFilterTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.tests.CurrencyExchangeTest"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
         </classes>
     </test>
 
-    <test name="CurrencyExchangeTest - Mobile">
-        <parameter name="device" value="mobile"/>
+    <test name="Chromium-LocationsTest" parallel="instances" thread-count="2" preserve-order="true">
+        <parameter name="browser" value="chromium"/>
+        <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.LocationsTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.tests.CurrencyExchangeTest"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
         </classes>
     </test>
 
-    <!-- Money Transfer Test -->
-    <test name="MoneyTransferTest - Desktop">
-        <parameter name="device" value="desktop"/>
+    <test name="Chromium-MoneyTransferTest" parallel="instances" thread-count="2" preserve-order="true">
+        <parameter name="browser" value="chromium"/>
+        <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.MoneyTransferTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.tests.MoneyTransferTest"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
         </classes>
     </test>
 
-    <test name="MoneyTransferTest - Mobile">
-        <parameter name="device" value="mobile"/>
+    <!-- ================= FIREFOX ================= -->
+    <test name="Firefox-ConsumerLoanCalculatorTest" parallel="instances" thread-count="2" preserve-order="true">
+        <parameter name="browser" value="firefox"/>
+        <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.ConsumerLoanCalculatorTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.tests.MoneyTransferTest"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
         </classes>
     </test>
 
-    <!-- Locations City Filter Test -->
-    <test name="LocationsCityFilterTest - Desktop">
-        <parameter name="device" value="desktop"/>
+    <test name="Firefox-CurrencyExchangeTest" parallel="instances" thread-count="2" preserve-order="true">
+        <parameter name="browser" value="firefox"/>
+        <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.CurrencyExchangeTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.tests.LocationsCityFilterTest"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
         </classes>
     </test>
 
-    <test name="LocationsCityFilterTest - Mobile">
-        <parameter name="device" value="mobile"/>
+    <test name="Firefox-LocationsCityFilterTest" parallel="instances" thread-count="2" preserve-order="true">
+        <parameter name="browser" value="firefox"/>
+        <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.LocationsCityFilterTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.tests.LocationsCityFilterTest"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
         </classes>
     </test>
 
-    <!-- Locations Test -->
-    <test name="LocationsTest - Desktop">
-        <parameter name="device" value="desktop"/>
+    <test name="Firefox-LocationsTest" parallel="instances" thread-count="2" preserve-order="true">
+        <parameter name="browser" value="firefox"/>
+        <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.LocationsTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.tests.LocationsTest"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
         </classes>
     </test>
 
-    <test name="LocationsTest - Mobile">
-        <parameter name="device" value="mobile"/>
+    <test name="Firefox-MoneyTransferTest" parallel="instances" thread-count="2" preserve-order="true">
+        <parameter name="browser" value="firefox"/>
+        <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.MoneyTransferTest"/>
         <classes>
-            <class name="ge.tbc.testautomation.tbcbankapp.tests.LocationsTest"/>
+            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+        </classes>
+    </test>
+
+    <!-- ================= WEBKIT ================= -->
+    <test name="Webkit-ConsumerLoanCalculatorTest" parallel="instances" thread-count="2" preserve-order="true">
+        <parameter name="browser" value="webkit"/>
+        <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.ConsumerLoanCalculatorTest"/>
+        <classes>
+            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+        </classes>
+    </test>
+
+    <test name="Webkit-CurrencyExchangeTest" parallel="instances" thread-count="2" preserve-order="true">
+        <parameter name="browser" value="webkit"/>
+        <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.CurrencyExchangeTest"/>
+        <classes>
+            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+        </classes>
+    </test>
+
+    <test name="Webkit-LocationsCityFilterTest" parallel="instances" thread-count="2" preserve-order="true">
+        <parameter name="browser" value="webkit"/>
+        <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.LocationsCityFilterTest"/>
+        <classes>
+            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+        </classes>
+    </test>
+
+    <test name="Webkit-LocationsTest" parallel="instances" thread-count="2" preserve-order="true">
+        <parameter name="browser" value="webkit"/>
+        <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.LocationsTest"/>
+        <classes>
+            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
+        </classes>
+    </test>
+
+    <test name="Webkit-MoneyTransferTest" parallel="instances" thread-count="2" preserve-order="true">
+        <parameter name="browser" value="webkit"/>
+        <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.MoneyTransferTest"/>
+        <classes>
+            <class name="ge.tbc.testautomation.tbcbankapp.base.DeviceFactory"/>
         </classes>
     </test>
 

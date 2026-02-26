@@ -1,12 +1,20 @@
 package ge.tbc.testautomation.tbcbankapp.tests;
 
-import ge.tbc.testautomation.tbcbankapp.base.BaseTest;
+import ge.tbc.testautomation.tbcbankapp.base.BaseDeviceTest;
 import org.testng.annotations.Test;
 
 import static ge.tbc.testautomation.tbcbankapp.data.Constants.*;
 
 @Test(description = "DEV-T5: Filter Available ATM Locations by Selected City")
-public class LocationsCityFilterTest extends BaseTest {
+public class LocationsCityFilterTest extends BaseDeviceTest {
+
+    public LocationsCityFilterTest(String device, String browser) {
+        super(device, browser);
+    }
+
+    public LocationsCityFilterTest(){
+        super();
+    }
 
     @Test(description = "DEV-T5 Step 1: Homepage access", priority = 1)
     public void homepageAccess() {

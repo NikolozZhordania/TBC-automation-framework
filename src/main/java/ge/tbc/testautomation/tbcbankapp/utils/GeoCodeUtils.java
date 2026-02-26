@@ -2,18 +2,16 @@ package ge.tbc.testautomation.tbcbankapp.utils;
 
 import com.microsoft.playwright.Page;
 import ge.tbc.testautomation.tbcbankapp.pages.LocationsPage;
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.Locale;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-public class Utils {
+public class GeoCodeUtils {
 
     public static JSONArray getGeocodeResults(Page page) {
 
@@ -35,39 +33,31 @@ public class Utils {
 
         String apiKey = System.getenv("GOOGLE_MAPS_API_KEY");
 
-        if (apiKey == null) {
+        if (apiKey == null)
             throw new RuntimeException("GOOGLE_MAPS_API_KEY is not set");
-        }
-        String url = String.format(
-                Locale.US,
-                "https://maps.googleapis.com/maps/api/geocode/json?latlng=%f,%f&key=%s&language=ka",
-                lat, lng, apiKey
-        );
 
-        try {
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .GET()
-                    .build();
+        Response response = RestAssured
+                .given()
+                .baseUri("https://maps.googleapis.com")
+                .queryParam("latlng", String.format(Locale.US, "%f,%f", lat, lng))
+                .queryParam("key", apiKey)
+                .queryParam("language", "ka")
+                .when()
+                .get("/maps/api/geocode/json")
+                .then()
+                .statusCode(200)
+                .extract()
+                .response();
 
-            HttpResponse<String> response =
-                    client.send(request, HttpResponse.BodyHandlers.ofString());
+        JSONObject json = new JSONObject(response.getBody().asString());
 
-            JSONObject json = new JSONObject(response.body());
+        if (!json.getString("status").equals("OK"))
+            throw new RuntimeException(
+                    "Google Maps API call failed: " +
+                            json.optString("error_message")
+            );
 
-            if (!json.getString("status").equals("OK")) {
-                throw new RuntimeException(
-                        "Google Maps API call failed: " +
-                                json.optString("error_message")
-                );
-            }
-
-            return json.getJSONArray("results");
-
-        } catch (Exception e) {
-            throw new RuntimeException("Google Maps API call failed", e);
-        }
+        return json.getJSONArray("results");
     }
 
     public static boolean addressComponentExists(

@@ -1,12 +1,21 @@
 package ge.tbc.testautomation.tbcbankapp.tests;
 
-import ge.tbc.testautomation.tbcbankapp.base.BaseTest;
+import ge.tbc.testautomation.tbcbankapp.base.BaseDeviceTest;
 import org.testng.annotations.Test;
 
 import static ge.tbc.testautomation.tbcbankapp.data.Constants.*;
 
 @Test(description = "DEV-T4 Validate Monthly Loan Calculator")
-public class ConsumerLoanCalculatorTest extends BaseTest {
+public class ConsumerLoanCalculatorTest extends BaseDeviceTest {
+
+    public ConsumerLoanCalculatorTest(String device, String browser) {
+        super(device, browser);
+    }
+
+    public ConsumerLoanCalculatorTest() {
+        super();
+    }
+
 
     @Test(description = "DEV-T4 Step 1: Homepage access", priority = 1)
     public void homepageAccess() {

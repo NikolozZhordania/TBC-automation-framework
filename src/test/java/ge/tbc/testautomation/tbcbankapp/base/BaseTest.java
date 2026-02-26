@@ -36,7 +36,6 @@ public class BaseTest {
         playwright = Playwright.create();
 
         BrowserType.LaunchOptions options = new BrowserType.LaunchOptions()
-//                .setSlowMo(500)
                 .setHeadless(false);
 
 

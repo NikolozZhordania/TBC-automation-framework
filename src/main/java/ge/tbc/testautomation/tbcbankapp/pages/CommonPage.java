@@ -30,7 +30,9 @@ public class CommonPage {
                 .filter(new Locator.FilterOptions().setHasText("თიბისი"))
                 .first();
 
-        this.dropDownMenuContainer = page.locator("//div[contains(@class,'megaMenuBackgroundAnimation')]").first();
+        this.dropDownMenuContainer = page.locator("//div[contains(@class,'megaMenuBackgroundAnimation')]")
+                .first();
+
         this.burgerMenu = page.locator("button[class*='hamburger-menu']").first();
 
         this.cookieAcceptButton = page.getByRole(AriaRole.BUTTON)

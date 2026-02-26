@@ -5,6 +5,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import ge.tbc.testautomation.tbcbankapp.pages.MoneyTransferPage;
+import ge.tbc.testautomation.tbcbankapp.utils.StringHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,6 @@ public class MoneyTransferSteps {
                 throw new AssertionError("Transfer option '" + text + "' does not list any supported currency!");
             }
         }
-
         System.out.println("All main page transfer options are visible and have supported currencies.");
         return this;
     }
@@ -69,7 +69,7 @@ public class MoneyTransferSteps {
         for (int i = 0; i < count; i++) {
             Locator option = moneyTransferPage.moneyTransferOptions.nth(i);
             assertThat(option).isVisible();
-            String title = normalize(option.textContent().split("\n")[0]);
+            String title = StringHelper.normalize(option.textContent().split("\n")[0]);
             if (!title.isEmpty()) mainPageOptions.add(title);
         }
 
@@ -149,7 +149,7 @@ public class MoneyTransferSteps {
             Locator card = moneyTransferPage.moneyTransferCalculatorCards.nth(i);
             card.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
 
-            String title = normalize(card.textContent());
+            String title = StringHelper.normalize(card.textContent());
             if (!title.isEmpty()) calculatorOptions.add(title);
         }
 
@@ -192,9 +192,5 @@ public class MoneyTransferSteps {
         return assertCalculatorOptionsNotEmpty()
                 .assertEachCalculatorOptionHasGelCommission()
                 .assertEachCalculatorOptionExistsOnMainPage();
-    }
-
-    private String normalize(String text) {
-        return text == null ? "" : text.trim().replaceAll("\\s+", " ");
     }
 }

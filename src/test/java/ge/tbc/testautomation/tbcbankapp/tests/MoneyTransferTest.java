@@ -1,13 +1,21 @@
 package ge.tbc.testautomation.tbcbankapp.tests;
 
-import ge.tbc.testautomation.tbcbankapp.base.BaseTest;
+import ge.tbc.testautomation.tbcbankapp.base.BaseDeviceTest;
 import org.testng.annotations.Test;
 
 import static ge.tbc.testautomation.tbcbankapp.data.Constants.TRANSFER_AMOUNT;
 import static ge.tbc.testautomation.tbcbankapp.data.Constants.TRANSFER_COUNTRY;
 
 @Test(description = "DEV-T3 Validate Money Transfer Options")
-public class MoneyTransferTest extends BaseTest {
+public class MoneyTransferTest extends BaseDeviceTest {
+
+    public MoneyTransferTest(String device, String browser) {
+        super(device, browser);
+    }
+
+    public MoneyTransferTest(){
+        super();
+    }
 
     @Test(description = "DEV-T3 Step 1: Homepage access", priority = 1)
     public void homepageAccess() {
