@@ -5,7 +5,8 @@ import com.microsoft.playwright.Page;
 
 public class MoneyTransferPage extends CommonPage {
 
-    public Locator pageHeader,
+    public Locator
+            pageHeader,
             moneyTransferOptions,
             moneyTransferCommissionCalculator,
             moneyInputField,

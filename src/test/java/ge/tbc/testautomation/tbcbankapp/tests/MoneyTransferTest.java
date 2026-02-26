@@ -41,7 +41,8 @@ public class MoneyTransferTest extends BaseTest {
 
     @Test(description = "DEV-T3 Step 5: Commission Calculator access", priority = 5)
     public void commissionCalculatorAccess() {
-        moneyTransferSteps.openCommissionCalculator();
+        moneyTransferSteps
+                .openCommissionCalculator();
     }
 
     @Test(description = "DEV-T3 Step 6: Transfer amount entry & Country Selection", priority = 6)

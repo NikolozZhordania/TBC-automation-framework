@@ -118,12 +118,4 @@ public class HomeSteps {
         return this;
     }
 
-    public HomeSteps verifyConsumerLoanOptionVisibility() {
-        if (TestContext.getDevice() == DeviceType.MOBILE) {
-            assertThat(forMeMenu.consumerLoanButtonMobile).isVisible();
-        } else {
-            assertThat(forMeMenu.consumerLoanButton).isVisible();
-        }
-        return this;
-    }
 }

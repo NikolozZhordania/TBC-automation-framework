@@ -5,17 +5,18 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 
 public class LocationsPage extends CommonPage {
-
     Page page;
-    public Locator pageHeader,
-                    atmServiceButton,
-                    atmTitle,
-                    cityDropdown,
-                    locationInput,
-                    atmListItems,
-                    map,
-                    activeMapMarker,
-                    currentUserLocation;
+
+    public Locator
+            pageHeader,
+            atmServiceButton,
+            atmTitle,
+            cityDropdown,
+            locationInput,
+            atmListItems,
+            map,
+            activeMapMarker,
+            currentUserLocation;
 
     public LocationsPage(Page page) {
         super(page);

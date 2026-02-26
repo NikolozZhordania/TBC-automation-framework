@@ -26,7 +26,7 @@ public class BaseTest {
     @BeforeClass(alwaysRun = true)
     public void setUp(
             @Optional("desktop") String device,
-            @Optional("chromium") String browserType) {
+            @Optional("webkit") String browserType) {
 
         DeviceType deviceType = device.equalsIgnoreCase("mobile")
                 ? DeviceType.MOBILE
@@ -90,7 +90,6 @@ public class BaseTest {
             CommonPage commonPage = new CommonPage(page);
             Locator cookieButton = commonPage.cookieAcceptButton;
 
-            // Wait up to 3 seconds for cookie button
             cookieButton.waitFor(new Locator.WaitForOptions()
                     .setState(WaitForSelectorState.VISIBLE)
                     .setTimeout(3000));

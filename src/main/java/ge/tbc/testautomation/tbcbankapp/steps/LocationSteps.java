@@ -21,8 +21,6 @@ public class LocationSteps {
         this.locationsPage = new LocationsPage(page);
     }
 
-    // ==================== PAGE NAVIGATION ====================
-
     public LocationSteps waitForLocationsPageToLoad() {
         locationsPage.pageHeader.waitFor(new Locator.WaitForOptions()
                 .setState(WaitForSelectorState.VISIBLE)
@@ -42,8 +40,6 @@ public class LocationSteps {
                 "Page header is not visible");
         return this;
     }
-
-    // ==================== ATM SERVICE SELECTION ====================
 
     public LocationSteps waitForATMServiceButton() {
         locationsPage.atmServiceButton.waitFor(new Locator.WaitForOptions()
@@ -72,8 +68,6 @@ public class LocationSteps {
                 "ATM title is not displayed correctly. Found: " + titleText);
         return this;
     }
-
-    // ==================== CITY FILTER ====================
 
     public LocationSteps waitForCityDropdown() {
         locationsPage.cityDropdown.waitFor(new Locator.WaitForOptions()
@@ -115,8 +109,6 @@ public class LocationSteps {
         return this;
     }
 
-    // ==================== LOCATION INPUT / SEARCH ====================
-
     public LocationSteps waitForLocationInput() {
         locationsPage.locationInput.waitFor(new Locator.WaitForOptions()
                 .setState(WaitForSelectorState.VISIBLE)
@@ -135,8 +127,6 @@ public class LocationSteps {
         page.waitForTimeout(1500);
         return this;
     }
-
-    // ==================== ATM LIST VERIFICATION ====================
 
     public LocationSteps waitForATMListToLoad() {
         Locator atmList = page.locator("app-atm-branches-section-list-item").first();
@@ -194,8 +184,6 @@ public class LocationSteps {
     }
 
 
-    // ==================== ATM SELECTION ====================
-
     public LocationSteps scrollToATM(String atmName) {
         Locator atm = locationsPage.atmOption(atmName).first();
         atm.scrollIntoViewIfNeeded();
@@ -209,8 +197,6 @@ public class LocationSteps {
         return this;
     }
 
-
-    // ==================== ATM HIGHLIGHT VERIFICATION ====================
 
     public LocationSteps waitForATMHighlight(String atmName) {
         Locator atmListItem = page.getByText(atmName);
@@ -241,17 +227,8 @@ public class LocationSteps {
     }
 
 
-    // ==================== MAP INTERACTIONS ====================
-
-    public LocationSteps waitForMapToLoad() {
-        locationsPage.map.waitFor(new Locator.WaitForOptions()
-                .setState(WaitForSelectorState.VISIBLE)
-                .setTimeout(15000));
-        return this;
-    }
-
     public LocationSteps waitForMapToUpdate() {
-        page.waitForTimeout(1000); // Wait for map markers to update
+        page.waitForTimeout(1000);
         return this;
     }
 
@@ -272,8 +249,6 @@ public class LocationSteps {
         return this;
     }
 
-
-    // ==================== GEOCODING / API VERIFICATION ====================
 
     public JSONArray fetchGeocodeResults() {
         waitForMapToUpdate();
@@ -305,8 +280,6 @@ public class LocationSteps {
 
         return this;
     }
-
-    // ==================== DEBUG / UTILITY METHODS ====================
 
     public LocationSteps logATMListCount() {
         int count = getATMListCount();

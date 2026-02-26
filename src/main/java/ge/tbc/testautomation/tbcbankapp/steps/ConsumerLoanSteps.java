@@ -52,11 +52,6 @@ public class ConsumerLoanSteps {
         return this;
     }
 
-    public ConsumerLoanSteps enterLoanAmount(String amount) {
-        return resolveAndFillLoanAmountInput(amount)
-                .verifyLoanAmountIndicator(amount);
-    }
-
     // ── Month Count ──────────────────────────────────────────────────────────
 
     public ConsumerLoanSteps resolveAndFillMonthCountInput(String months) {
@@ -78,10 +73,6 @@ public class ConsumerLoanSteps {
         return this;
     }
 
-    public ConsumerLoanSteps enterMonthCount(String months) {
-        return resolveAndFillMonthCountInput(months)
-                .verifyMonthCountIndicator(months);
-    }
 
     // ── Payment Validation ───────────────────────────────────────────────────
 

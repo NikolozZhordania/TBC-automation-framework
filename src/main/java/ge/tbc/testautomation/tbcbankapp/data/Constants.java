@@ -8,8 +8,6 @@ public class Constants {
     public static final String MONEY_TRANSFER_PAGE_URL = APP_URL + "ka/other-products/money-transfers";
     public static final String CONSUMER_LOAN_URL = APP_URL + "ka/loans/consumer-loan";
     public static final String CONSUMER_LOAN_DIGITAL_URL = APP_URL + "ka/loans/consumer-loan/digital";
-    //API KEY
-    public static final String GOOGLE_MAPS_API_KEY = "AIzaSyDxk3oV23GUpv89ANJEiIypf62MFbW2XgM";
     //LOCATIONS AND STREETS
     public static final String LOCATION_INPUT = "ვაზისუბანი";
     public static final String EXPECTED_LOCATION_INPUT = "ვაზისუბნ";

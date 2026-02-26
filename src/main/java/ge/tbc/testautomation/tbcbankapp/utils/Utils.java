@@ -1,8 +1,6 @@
 package ge.tbc.testautomation.tbcbankapp.utils;
 
-import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import ge.tbc.testautomation.tbcbankapp.data.Constants;
 import ge.tbc.testautomation.tbcbankapp.pages.LocationsPage;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,12 +14,6 @@ import java.util.Locale;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 public class Utils {
-
-    public static Locator getButton(Locator desktopButton, Locator mobileButton) {
-        return TestContext.getDevice() == DeviceType.DESKTOP
-                ? desktopButton
-                : mobileButton;
-    }
 
     public static JSONArray getGeocodeResults(Page page) {
 
@@ -41,10 +33,15 @@ public class Utils {
         double lat = Double.parseDouble(coords[0].trim());
         double lng = Double.parseDouble(coords[1].trim());
 
+        String apiKey = System.getenv("GOOGLE_MAPS_API_KEY");
+
+        if (apiKey == null) {
+            throw new RuntimeException("GOOGLE_MAPS_API_KEY is not set");
+        }
         String url = String.format(
                 Locale.US,
                 "https://maps.googleapis.com/maps/api/geocode/json?latlng=%f,%f&key=%s&language=ka",
-                lat, lng, Constants.GOOGLE_MAPS_API_KEY
+                lat, lng, apiKey
         );
 
         try {
