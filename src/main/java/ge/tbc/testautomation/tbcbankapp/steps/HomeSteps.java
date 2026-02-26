@@ -73,7 +73,6 @@ public class HomeSteps {
         return this;
     }
 
-    /* ---------- Validations ---------- */
 
     public HomeSteps verifyHomepageLoaded() {
         if (TestContext.getDevice() == DeviceType.DESKTOP) {

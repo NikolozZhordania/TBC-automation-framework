@@ -129,16 +129,14 @@ public class LocationSteps {
     }
 
     public LocationSteps waitForATMListToLoad() {
-        Locator atmList = page.locator("app-atm-branches-section-list-item").first();
-        atmList.waitFor(new Locator.WaitForOptions()
+        locationsPage.atmListItems.first().waitFor(new Locator.WaitForOptions()
                 .setState(WaitForSelectorState.VISIBLE)
                 .setTimeout(15000));
         return this;
     }
 
     public int getATMListCount() {
-        Locator atmList = page.locator("app-atm-branches-section-list-item");
-        return atmList.count();
+        return locationsPage.atmListItems.count();
     }
 
     public LocationSteps verifyATMListIsNotEmpty() {
@@ -150,7 +148,7 @@ public class LocationSteps {
 
 
     public LocationSteps verifyFilteredATMs(String expectedText) {
-        Locator atmList = page.locator("app-atm-branches-section-list-item");
+        Locator atmList = locationsPage.atmListItems;
         Locator matchingAtms = atmList.filter(
                 new Locator.FilterOptions().setHasText(expectedText)
         );

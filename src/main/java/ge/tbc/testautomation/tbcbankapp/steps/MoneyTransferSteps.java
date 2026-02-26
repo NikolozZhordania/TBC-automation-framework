@@ -25,8 +25,7 @@ public class MoneyTransferSteps {
     }
 
     public MoneyTransferSteps verifyMoneyTransferPageOpened() {
-        Locator header = page.getByRole(AriaRole.HEADING,
-                new Page.GetByRoleOptions().setName("სწრაფი ფულადი გზავნილები"));
+        Locator header = moneyTransferPage.pageHeader;
         header.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
         assertThat(header).isVisible();
         return this;
@@ -87,7 +86,7 @@ public class MoneyTransferSteps {
     }
 
     public MoneyTransferSteps enterTransferAmount(String amount) {
-        Locator input = page.locator("div.input-with-label input").first();
+        Locator input = moneyTransferPage.moneyInputField;
         input.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
         input.fill(amount);
         return this;
@@ -101,7 +100,7 @@ public class MoneyTransferSteps {
     }
 
     public MoneyTransferSteps chooseCountryOption(String country) {
-        Locator countryOption = page.locator("div.tbcx-dropdown-popover-item__title-container")
+        Locator countryOption = moneyTransferPage.countryOptions
                 .filter(new Locator.FilterOptions().setHasText(country));
         countryOption.waitFor(new Locator.WaitForOptions()
                 .setState(WaitForSelectorState.VISIBLE)

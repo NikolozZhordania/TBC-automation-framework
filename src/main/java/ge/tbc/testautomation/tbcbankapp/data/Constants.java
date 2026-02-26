@@ -1,14 +1,14 @@
 package ge.tbc.testautomation.tbcbankapp.data;
 
 public class Constants {
-    //URLs
+
     public static final String APP_URL = "https://tbcbank.ge/";
     public static final String LOCATIONS_PAGE_URL = APP_URL + "ka/atms&branches";
     public static final String CURRENCY_EXCHANGE_PAGE_URL = APP_URL + "ka/treasury-products";
     public static final String MONEY_TRANSFER_PAGE_URL = APP_URL + "ka/other-products/money-transfers";
     public static final String CONSUMER_LOAN_URL = APP_URL + "ka/loans/consumer-loan";
     public static final String CONSUMER_LOAN_DIGITAL_URL = APP_URL + "ka/loans/consumer-loan/digital";
-    //LOCATIONS AND STREETS
+
     public static final String LOCATION_INPUT = "ვაზისუბანი";
     public static final String EXPECTED_LOCATION_INPUT = "ვაზისუბნ";
     public static final String SELECTED_ATM_LOCATION = " ვაზისუბნის 1 მ/რ, თეოფანე დავითაიას ქ. #1ა ";

@@ -11,31 +11,32 @@ public class MoneyTransferPage extends CommonPage {
             moneyTransferCommissionCalculator,
             moneyInputField,
             countrySelectionButton,
-            moneyTransferCalculatorCards;
+            moneyTransferCalculatorCards,
+            countryOptions;
 
     public MoneyTransferPage(Page page) {
         super(page);
 
-        this.pageHeader = page.locator(
-                "h1.tbcx-pw-title",
-                new Page.LocatorOptions().setHasText("სწრაფი ფულადი გზავნილები")
-        ).first();
+        this.pageHeader = page.getByRole(com.microsoft.playwright.options.AriaRole.HEADING)
+                .filter(new Locator.FilterOptions().setHasText("სწრაფი ფულადი გზავნილები"))
+                .first();
 
-        this.moneyTransferOptions = page.locator(
-                "tbcx-pw-money-transfer-system-card tbcx-pw-card"
-        );
+        this.moneyTransferOptions = page.locator("tbcx-pw-money-transfer-system-card >> tbcx-pw-card");
 
-        this.moneyTransferCommissionCalculator = page.locator("tbcx-pw-tab-group button")
-                .filter(new Locator.FilterOptions().setHasText("გზავნილის გაგზავნის საკომისიო"));
+        this.moneyTransferCommissionCalculator = page.getByRole(com.microsoft.playwright.options.AriaRole.BUTTON)
+                .filter(new Locator.FilterOptions().setHasText("გზავნილის გაგზავნის საკომისიო"))
+                .first();
 
-        this.moneyInputField = page.locator(
-                "tbcx-pw-money-transfer-fee-calculator div.input-with-label input"
-        ).first();
+        this.moneyInputField = page.locator("tbcx-pw-money-transfer-fee-calculator")
+                .locator("div.input-with-label input")
+                .first();
 
-        this.countrySelectionButton = page.locator("//button[@class='tbcx-field tbcx-bg-color-higher']");
+        this.countrySelectionButton = page.locator("tbcx-pw-money-transfer-fee-calculator button")
+                .filter(new Locator.FilterOptions().setHasText("აირჩიე ქვეყანა"))
+                .first();
 
-        this.moneyTransferCalculatorCards = page.locator(
-                "//div[@class='tbcx-pw-money-transfer-fee-calculator__cards']"
-        );
+        this.moneyTransferCalculatorCards = page.locator("//div[@class='tbcx-pw-money-transfer-fee-calculator__cards']");
+
+        this.countryOptions = page.locator("div.tbcx-dropdown-popover-item__title-container");
     }
 }

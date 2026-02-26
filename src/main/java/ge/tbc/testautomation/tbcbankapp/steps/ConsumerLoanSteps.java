@@ -21,8 +21,6 @@ public class ConsumerLoanSteps {
         this.consumerLoanPage = new ConsumerLoanPage(page);
     }
 
-    // ── Page Verification ────────────────────────────────────────────────────
-
     public ConsumerLoanSteps verifyConsumerLoanPageURL() {
         assertThat(page).hasURL(CONSUMER_LOAN_DIGITAL_URL);
         return this;
@@ -33,7 +31,6 @@ public class ConsumerLoanSteps {
         return this;
     }
 
-    // ── Loan Amount ──────────────────────────────────────────────────────────
 
     public ConsumerLoanSteps resolveAndFillLoanAmountInput(String amount) {
         Locator input = consumerLoanPage.moneyAmountInput.isVisible()
@@ -51,8 +48,6 @@ public class ConsumerLoanSteps {
                 .containsText(digits.substring(0, 1));
         return this;
     }
-
-    // ── Month Count ──────────────────────────────────────────────────────────
 
     public ConsumerLoanSteps resolveAndFillMonthCountInput(String months) {
         Locator input = consumerLoanPage.monthCountInput.isVisible()
@@ -73,8 +68,6 @@ public class ConsumerLoanSteps {
         return this;
     }
 
-
-    // ── Payment Validation ───────────────────────────────────────────────────
 
     public ConsumerLoanSteps waitForPaymentContainer() {
         consumerLoanPage.estimatedMonthlyPaymentContainer

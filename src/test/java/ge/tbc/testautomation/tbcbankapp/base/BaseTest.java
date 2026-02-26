@@ -25,8 +25,8 @@ public class BaseTest {
     @Parameters({"device", "browser"})
     @BeforeClass(alwaysRun = true)
     public void setUp(
-            @Optional("desktop") String device,
-            @Optional("webkit") String browserType) {
+            @Optional("mobile") String device,
+            @Optional("chromium") String browserType) {
 
         DeviceType deviceType = device.equalsIgnoreCase("mobile")
                 ? DeviceType.MOBILE
