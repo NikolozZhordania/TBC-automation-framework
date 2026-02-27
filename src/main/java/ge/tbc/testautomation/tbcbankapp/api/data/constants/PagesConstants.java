@@ -19,8 +19,8 @@ public class PagesConstants {
     }
 
     public static class QueryParams {
-        public static final String LOCALE  = "locale";
-        public static final String KA      = "ka-GE";
+        public static final String LOCALE = "locale";
+        public static final String KA     = "ka-GE";
     }
 
     public static class PageIds {
@@ -28,4 +28,12 @@ public class PagesConstants {
         public static final String INVALID           = "invalid-page-xyz-404";
     }
 
+    public static class SeoTitles {
+        public static final String TREASURY_PRODUCTS_KA = "სახაზინო პროდუქტები";
+    }
+
+    public static class ExpectedValues {
+        public static final int EXPECTED_STATUS_200 = 200;
+        public static final int EXPECTED_STATUS_400 = 400;
+    }
 }

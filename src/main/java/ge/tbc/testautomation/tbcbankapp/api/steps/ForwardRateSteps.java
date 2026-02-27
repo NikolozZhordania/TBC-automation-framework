@@ -5,6 +5,7 @@ import ge.tbc.testautomation.tbcbankapp.api.data.constants.ForwardRateConstants.
 import ge.tbc.testautomation.tbcbankapp.api.data.models.response.forwardrate.CurrencyForwardRates;
 import ge.tbc.testautomation.tbcbankapp.api.data.models.response.forwardrate.ForwardRate;
 import ge.tbc.testautomation.tbcbankapp.api.data.models.response.forwardrate.ForwardRateResponse;
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class ForwardRateSteps {
     private ForwardRateResponse forwardRatesResponse;
     private Response rawResponse;
 
+    @Step("Fetch forward rates for locale: {locale}")
     public ForwardRateSteps fetchForwardRates(String locale) {
         this.rawResponse = api.getForwardRates(locale);
         this.forwardRatesResponse = rawResponse
@@ -31,27 +33,32 @@ public class ForwardRateSteps {
         return this;
     }
 
+    @Step("Fetch forward rates with invalid locale: {locale}, expecting status: {expectedStatusCode}")
     public ForwardRateSteps fetchForwardRatesExpectingError(String locale, int expectedStatusCode) {
         this.rawResponse = api.getForwardRatesWithInvalidLocale(locale);
         System.out.printf("Received %d for locale: %s%n", rawResponse.statusCode(), locale);
         return this;
     }
 
+    @Step("Fetch forward rates with no params")
     public ForwardRateSteps fetchForwardRatesNoParams() {
         this.rawResponse = api.getForwardRatesNoParams();
         return this;
     }
 
+    @Step("Validate status code is {expectedCode}")
     public ForwardRateSteps validateStatusCode(int expectedCode) {
         assertThat("Status code", rawResponse.statusCode(), equalTo(expectedCode));
         return this;
     }
 
+    @Step("Validate Content-Type is application/json")
     public ForwardRateSteps validateContentTypeIsJson() {
         assertThat("Content-Type", rawResponse.contentType(), containsString("application/json"));
         return this;
     }
 
+    @Step("Validate response time is under {maxMillis}ms")
     public ForwardRateSteps validateResponseTimeIsUnder(long maxMillis) {
         assertThat(
                 String.format("Response time %dms exceeds limit of %dms", rawResponse.getTime(), maxMillis),
@@ -60,32 +67,38 @@ public class ForwardRateSteps {
         return this;
     }
 
+    @Step("Validate rates list is not null")
     public ForwardRateSteps validateRatesListIsNotNull() {
         assertThat("rates list must not be null", forwardRatesResponse.getRates(), notNullValue());
         return this;
     }
 
+    @Step("Validate rates list is not empty")
     public ForwardRateSteps validateRatesListIsNotEmpty() {
         assertThat("rates list must not be empty", forwardRatesResponse.getRates(), not(empty()));
         return this;
     }
 
+    @Step("Validate rates count equals {expectedCount}")
     public ForwardRateSteps validateRatesCountEquals(int expectedCount) {
         assertThat("Number of currency groups",
                 forwardRatesResponse.getRates().size(), equalTo(expectedCount));
         return this;
     }
 
+    @Step("Validate updateDate is not null")
     public ForwardRateSteps validateUpdateDateIsNotNull() {
         assertThat("updateDate must not be null", forwardRatesResponse.getUpdateDate(), notNullValue());
         return this;
     }
 
+    @Step("Validate updateDate is not empty")
     public ForwardRateSteps validateUpdateDateIsNotEmpty() {
         assertThat("updateDate must not be empty", forwardRatesResponse.getUpdateDate(), not(emptyString()));
         return this;
     }
 
+    @Step("Validate updateDate matches ISO 8601 format")
     public ForwardRateSteps validateUpdateDateFormat() {
         assertThat("updateDate ISO 8601 format",
                 forwardRatesResponse.getUpdateDate(),
@@ -93,11 +106,12 @@ public class ForwardRateSteps {
         return this;
     }
 
-    // Convenience composite
+    @Step("Validate updateDate is present (not null and not empty)")
     public ForwardRateSteps validateUpdateDateIsPresent() {
         return validateUpdateDateIsNotNull().validateUpdateDateIsNotEmpty();
     }
 
+    @Step("Validate currency group '{isoCode}' exists")
     public ForwardRateSteps validateCurrencyGroupExists(String isoCode) {
         boolean exists = forwardRatesResponse.getRates().stream()
                 .anyMatch(r -> isoCode.equalsIgnoreCase(r.getIso()));
@@ -105,6 +119,7 @@ public class ForwardRateSteps {
         return this;
     }
 
+    @Step("Validate all currency groups have a non-empty ISO code")
     public ForwardRateSteps validateAllCurrencyGroupsHaveIsoCode() {
         forwardRatesResponse.getRates().forEach(group -> {
             assertThat("iso field must not be null", group.getIso(), notNullValue());
@@ -113,6 +128,7 @@ public class ForwardRateSteps {
         return this;
     }
 
+    @Step("Validate period count for currency '{isoCode}'")
     public ForwardRateSteps validatePeriodCount(String isoCode) {
         assertThat(
                 String.format("%s should have %d periods", isoCode, ExpectedPeriods.EXPECTED_PERIOD_COUNT),
@@ -122,6 +138,7 @@ public class ForwardRateSteps {
         return this;
     }
 
+    @Step("Validate periods are in ascending day order for currency '{isoCode}'")
     public ForwardRateSteps validatePeriodsAreInAscendingDayOrder(String isoCode) {
         List<ForwardRate> rates = getCurrencyGroup(isoCode).getForwardRates();
         for (int i = 1; i < rates.size(); i++) {
@@ -133,6 +150,7 @@ public class ForwardRateSteps {
         return this;
     }
 
+    @Step("Validate expected days for currency '{isoCode}'")
     public ForwardRateSteps validateExpectedDays(String isoCode) {
         List<ForwardRate> rates = getCurrencyGroup(isoCode).getForwardRates();
         int[] expectedDays = ExpectedPeriods.EXPECTED_DAYS;
@@ -146,6 +164,7 @@ public class ForwardRateSteps {
         return this;
     }
 
+    @Step("Validate all forward rate fields are not null for currency '{isoCode}'")
     public ForwardRateSteps validateAllForwardRateFieldsAreNotNull(String isoCode) {
         getCurrencyGroup(isoCode).getForwardRates().forEach(rate -> {
             assertThat("iso1",               rate.getIso1(),               notNullValue());
@@ -162,7 +181,7 @@ public class ForwardRateSteps {
         return this;
     }
 
-
+    @Step("Validate iso1 inside rates equals '{isoCode}'")
     public ForwardRateSteps validateIso1InsideRatesEquals(String isoCode) {
         getCurrencyGroup(isoCode).getForwardRates().forEach(rate ->
                 assertThat("iso1 should match parent currency",
@@ -171,6 +190,7 @@ public class ForwardRateSteps {
         return this;
     }
 
+    @Step("Validate iso2 inside rates is GEL for currency '{isoCode}'")
     public ForwardRateSteps validateIso2InsideRatesIsGel(String isoCode) {
         getCurrencyGroup(isoCode).getForwardRates().forEach(rate ->
                 assertThat("iso2 should be GEL",
@@ -179,6 +199,7 @@ public class ForwardRateSteps {
         return this;
     }
 
+    @Step("Validate ask rate is always greater than bid rate for currency '{isoCode}'")
     public ForwardRateSteps validateAskRateIsAlwaysGreaterThanBidRate(String isoCode) {
         getCurrencyGroup(isoCode).getForwardRates().forEach(rate ->
                 assertThat(
@@ -189,6 +210,7 @@ public class ForwardRateSteps {
         return this;
     }
 
+    @Step("Validate ask point is always greater than bid point for currency '{isoCode}'")
     public ForwardRateSteps validateAskPointIsAlwaysGreaterThanBidPoint(String isoCode) {
         getCurrencyGroup(isoCode).getForwardRates().forEach(rate ->
                 assertThat(
@@ -199,6 +221,7 @@ public class ForwardRateSteps {
         return this;
     }
 
+    @Step("Validate ask interest is always greater than bid interest for currency '{isoCode}'")
     public ForwardRateSteps validateAskInterestIsAlwaysGreaterThanBidInterest(String isoCode) {
         getCurrencyGroup(isoCode).getForwardRates().forEach(rate ->
                 assertThat(
@@ -209,6 +232,7 @@ public class ForwardRateSteps {
         return this;
     }
 
+    @Step("Validate forward rates are positive for currency '{isoCode}'")
     public ForwardRateSteps validateForwardRatesArePositive(String isoCode) {
         getCurrencyGroup(isoCode).getForwardRates().forEach(rate -> {
             assertThat("bidForwardRate must be positive",
@@ -219,6 +243,7 @@ public class ForwardRateSteps {
         return this;
     }
 
+    @Step("Validate forward points are non-negative for currency '{isoCode}'")
     public ForwardRateSteps validateForwardPointsAreNonNegative(String isoCode) {
         getCurrencyGroup(isoCode).getForwardRates().forEach(rate -> {
             assertThat("bidForwardPoint must be >= 0",
@@ -229,6 +254,7 @@ public class ForwardRateSteps {
         return this;
     }
 
+    @Step("Validate forward interest rates are within range for currency '{isoCode}'")
     public ForwardRateSteps validateForwardInterestRatesAreWithinRange(String isoCode) {
         getCurrencyGroup(isoCode).getForwardRates().forEach(rate -> {
             assertThat("bidForwardInterest out of range", rate.getBidForwardInterest(),
@@ -241,6 +267,7 @@ public class ForwardRateSteps {
         return this;
     }
 
+    @Step("Validate bid rates increase over time for currency '{isoCode}'")
     public ForwardRateSteps validateBidRatesIncreaseOverTime(String isoCode) {
         List<ForwardRate> rates = getCurrencyGroup(isoCode).getForwardRates();
         for (int i = 1; i < rates.size(); i++) {
@@ -253,6 +280,7 @@ public class ForwardRateSteps {
         return this;
     }
 
+    @Step("Validate ask rates increase over time for currency '{isoCode}'")
     public ForwardRateSteps validateAskRatesIncreaseOverTime(String isoCode) {
         List<ForwardRate> rates = getCurrencyGroup(isoCode).getForwardRates();
         for (int i = 1; i < rates.size(); i++) {

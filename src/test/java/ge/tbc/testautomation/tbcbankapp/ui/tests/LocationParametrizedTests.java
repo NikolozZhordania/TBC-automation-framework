@@ -3,10 +3,13 @@ package ge.tbc.testautomation.tbcbankapp.ui.tests;
 import ge.tbc.testautomation.tbcbankapp.ui.base.BaseDeviceTest;
 import ge.tbc.testautomation.tbcbankapp.ui.data.db.model.Branch;
 import ge.tbc.testautomation.tbcbankapp.ui.data.providers.BranchDataProvider;
-import ge.tbc.testautomation.tbcbankapp.ui.utils.LocationHelper;
+import io.qameta.allure.*;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
 
+@Epic("TBC Bank Web Application")
+@Feature("Locations & ATMs")
+@Test(description = "Parametrized tests to verify ATM lists, map markers, and geocode accuracy per city")
 public class LocationParametrizedTests extends BaseDeviceTest {
 
     public LocationParametrizedTests(String device, String browser) {
@@ -16,8 +19,6 @@ public class LocationParametrizedTests extends BaseDeviceTest {
     public LocationParametrizedTests() {
         super();
     }
-
-    private LocationHelper locationHelper = new LocationHelper(page);
 
     private void navigateToAtmSection(String city) {
         homeSteps
@@ -37,8 +38,11 @@ public class LocationParametrizedTests extends BaseDeviceTest {
                 .selectCity(city);
     }
 
+    @Story("ATM List Validation")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Verify that the ATM list count for a given city and search term from the DB meets or exceeds the expected minimum count.")
     @Test(
-            dataProvider      = "atmTestCases",
+            dataProvider      = "branchTestCases",
             dataProviderClass = BranchDataProvider.class,
             description       = "ATM list count >= expected_min_count per city/search_term from DB"
     )
@@ -46,37 +50,24 @@ public class LocationParametrizedTests extends BaseDeviceTest {
         System.out.println("Running: " + tc.getDescription());
         navigateToAtmSection(tc.getCity());
 
-        if (tc.getSearchTerm() != null) {
-            locationSteps
-                    .waitForLocationInput()
-                    .typeInLocationInput(tc.getSearchTerm())
-                    .waitForATMListToUpdate();
-        }
-
         locationSteps
+                .filterBySearchTermIfPresent(tc.getSearchTerm())
                 .waitForATMListToLoad()
-                .logATMListCount();
-
-        int actual = locationHelper.getATMListCount();
-
-        org.testng.Assert.assertTrue(
-                actual >= tc.getExpectedMinCount(),
-                String.format("[%s | search='%s'] Expected >= %d ATMs but found %d",
-                        tc.getCity(), tc.getSearchTerm(), tc.getExpectedMinCount(), actual)
-        );
+                .logATMListCount()
+                .verifyATMListCountAtLeast(tc.getExpectedMinCount(), tc.getCity(), tc.getSearchTerm());
     }
 
-
+    @Story("ATM Highlight & Geocode Verification")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Verify that a named ATM is highlighted on the map and the street in geocode results matches the DB expectation, if provided.")
     @Test(
-            dataProvider      = "atmTestCases",
+            dataProvider      = "branchTestCases",
             dataProviderClass = BranchDataProvider.class,
             description       = "Named ATM is highlighted and geocode street matches DB expectation"
     )
     public void namedAtmHighlightAndGeocodeTest(Branch tc) {
         if (tc.getExpectedAtmName() == null) {
-            throw new SkipException(
-                    tc.getId() + " — no expected_atm_name"
-            );
+            throw new SkipException("Row " + tc.getId() + " — no expected_atm_name");
         }
 
         navigateToAtmSection(tc.getCity());
@@ -87,15 +78,15 @@ public class LocationParametrizedTests extends BaseDeviceTest {
                 .scrollToATM(tc.getExpectedAtmName())
                 .clickATM(tc.getExpectedAtmName())
                 .waitForMapToUpdate()
-                .verifyATMPointHighlighted(tc.getExpectedAtmName());
-
-        if (tc.getExpectedStreet() != null) {
-            locationSteps.verifyStreetInGeocodeResults(tc.getExpectedStreet());
-        }
+                .verifyATMPointHighlighted(tc.getExpectedAtmName())
+                .verifyStreetInGeocodeResultsIfPresent(tc.getExpectedStreet());
     }
 
+    @Story("Map Marker Validation")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Verify that after filtering by city, the map shows at least the expected number of markers corresponding to ATMs.")
     @Test(
-            dataProvider      = "atmTestCases",
+            dataProvider      = "branchTestCases",
             dataProviderClass = BranchDataProvider.class,
             description       = "Map marker count >= expected_min_count after city filter"
     )

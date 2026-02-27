@@ -1,11 +1,14 @@
 package ge.tbc.testautomation.tbcbankapp.ui.tests;
 
 import ge.tbc.testautomation.tbcbankapp.ui.base.BaseDeviceTest;
+import io.qameta.allure.*;
 import org.testng.annotations.Test;
 
-import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.*;
+import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.CurrencyExchange.*;
 
-@Test(description = "DEV-T2 Verify Currency Conversion Rates")
+@Epic("TBC Bank Web Application")
+@Feature("Currency Exchange")
+@Test(description = "DEV-T2 Verify currency conversion rates end-to-end flow")
 public class CurrencyExchangeTest extends BaseDeviceTest {
 
     public CurrencyExchangeTest(String device, String browser) {
@@ -16,7 +19,11 @@ public class CurrencyExchangeTest extends BaseDeviceTest {
         super();
     }
 
-    @Test(description = "DEV-T2 Step 1: Homepage access", priority = 1)
+    @Story("Homepage Access")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Verify that the homepage loads correctly, all main UI elements are visible, " +
+            "and navigation menu can be opened for currency exchange flow.")
+    @Test(description = "Step 1: Access homepage and open navigation menu", priority = 1)
     public void homepageAccess() {
         homeSteps
                 .openHomepage()
@@ -25,14 +32,20 @@ public class CurrencyExchangeTest extends BaseDeviceTest {
                 .openNavigationMenu();
     }
 
-    @Test(description = "DEV-T2 Step 2: Navigation menu access", priority = 2)
+    @Story("Navigation Menu Validation")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Verify that the currency exchange option is visible in the navigation menu and dropdown menu is functional.")
+    @Test(description = "Step 2: Validate dropdown menu and currency exchange option visibility", priority = 2)
     public void navMenuAccess() {
         homeSteps
                 .verifyDropDownMenuVisibility()
                 .verifyCurrencyExchangeOptionVisibility();
     }
 
-    @Test(description = "DEV-T2 Step 3: Currency Exchange page selection", priority = 3)
+    @Story("Currency Exchange Page Access")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Verify that the user can navigate to the Currency Exchange page and that the page URL and header are correct.")
+    @Test(description = "Step 3: Navigate to Currency Exchange page and validate page URL and header", priority = 3)
     public void currencyExchangePageSelection() {
         homeSteps
                 .openCurrencyExchangePage();
@@ -42,7 +55,10 @@ public class CurrencyExchangeTest extends BaseDeviceTest {
                 .verifyCurrencyExchangePageOpened();
     }
 
-    @Test(description = "DEV-T2 Step 4: Currency selection (EUR → GEL)", priority = 4)
+    @Story("Currency Selection")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Select the source currency as EUR and target currency as GEL and validate that selection is correct.")
+    @Test(description = "Step 4: Select EUR as source currency and GEL as target currency", priority = 4)
     public void currencySelection() {
         currencyExchangeSteps
                 .openCurrencyDropdown()
@@ -51,7 +67,10 @@ public class CurrencyExchangeTest extends BaseDeviceTest {
                 .verifyToCurrency(GEL_CURRENCY);
     }
 
-    @Test(description = "DEV-T2 Step 5: Currency conversion validation", priority = 5)
+    @Story("Currency Conversion Validation")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Enter an amount in the sell field, fetch the current conversion rate, and validate that the buy field value is correct.")
+    @Test(description = "Step 5: Validate currency conversion for EUR → GEL", priority = 5)
     public void currencyConversion() {
         currencyExchangeSteps
                 .enterAmountInSellField(SELL_AMOUNT)
@@ -59,7 +78,10 @@ public class CurrencyExchangeTest extends BaseDeviceTest {
                 .verifyBuyFieldAmount(SELL_AMOUNT);
     }
 
-    @Test(description = "DEV-T2 Step 6: Currency conversion swap", priority = 6)
+    @Story("Currency Swap Functionality")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Click the swap button to switch source and target currencies and validate that the swap updated the fields correctly.")
+    @Test(description = "Step 6: Swap currencies and verify fields updated correctly", priority = 6)
     public void currencyConversionSwap() {
         currencyExchangeSteps
                 .clickSwapButton()
@@ -67,7 +89,10 @@ public class CurrencyExchangeTest extends BaseDeviceTest {
                 .verifyToCurrency(EUR_CURRENCY);
     }
 
-    @Test(description = "DEV-T2 Step 7: Swapped currency conversion validation", priority = 7)
+    @Story("Swapped Currency Conversion Validation")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("After swapping currencies, enter the same amount again and validate that the conversion value is correct for GEL → EUR.")
+    @Test(description = "Step 7: Validate conversion after currency swap (GEL → EUR)", priority = 7)
     public void swappedCurrencyConversionCheck() {
         currencyExchangeSteps
                 .enterAmountInSellField(SELL_AMOUNT)

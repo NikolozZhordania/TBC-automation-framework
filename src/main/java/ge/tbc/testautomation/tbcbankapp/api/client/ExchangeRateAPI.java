@@ -5,7 +5,7 @@ import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
 
-public class ExchangeRateAPI {
+public class ExchangeRateAPI extends BaseAPIClient{
 
     public Response getExchangeRate(String iso1, String iso2) {
         return given()

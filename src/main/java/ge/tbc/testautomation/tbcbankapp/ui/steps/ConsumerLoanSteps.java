@@ -5,10 +5,10 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import ge.tbc.testautomation.tbcbankapp.ui.pages.ConsumerLoanPage;
 import ge.tbc.testautomation.tbcbankapp.ui.utils.ConsumerLoanHelper;
-
+import io.qameta.allure.Step;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.CONSUMER_LOAN_DIGITAL_URL;
+import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.URLs.*;
 
 public class ConsumerLoanSteps {
 
@@ -19,20 +19,22 @@ public class ConsumerLoanSteps {
     public ConsumerLoanSteps(Page page) {
         this.page = page;
         this.consumerLoanPage = new ConsumerLoanPage(page);
-        this. consumerLoanHelper = new ConsumerLoanHelper(consumerLoanPage);
+        this.consumerLoanHelper = new ConsumerLoanHelper(consumerLoanPage);
     }
 
+    @Step("Verify Consumer Loan page URL")
     public ConsumerLoanSteps verifyConsumerLoanPageURL() {
         assertThat(page).hasURL(CONSUMER_LOAN_DIGITAL_URL);
         return this;
     }
 
+    @Step("Verify Consumer Loan page header is visible")
     public ConsumerLoanSteps verifyHeader() {
         assertThat(consumerLoanPage.pageHeader).isVisible();
         return this;
     }
 
-
+    @Step("Fill loan amount input with: {amount}")
     public ConsumerLoanSteps resolveAndFillLoanAmountInput(String amount) {
         Locator input = consumerLoanPage.moneyAmountInput.isVisible()
                 ? consumerLoanPage.moneyAmountInput
@@ -43,6 +45,7 @@ public class ConsumerLoanSteps {
         return this;
     }
 
+    @Step("Verify loan amount indicator for: {expectedAmount}")
     public ConsumerLoanSteps verifyLoanAmountIndicator(String expectedAmount) {
         String digits = expectedAmount.replaceAll("[^0-9]", "");
         assertThat(consumerLoanPage.loanAmountIndicator)
@@ -50,6 +53,7 @@ public class ConsumerLoanSteps {
         return this;
     }
 
+    @Step("Fill month count input with: {months}")
     public ConsumerLoanSteps resolveAndFillMonthCountInput(String months) {
         Locator input = consumerLoanPage.monthCountInput.isVisible()
                 ? consumerLoanPage.monthCountInput
@@ -60,6 +64,7 @@ public class ConsumerLoanSteps {
         return this;
     }
 
+    @Step("Verify month count indicator for: {expectedMonths}")
     public ConsumerLoanSteps verifyMonthCountIndicator(String expectedMonths) {
         String formattedMonths = expectedMonths + " თვე";
         String actualText = consumerLoanPage.monthCountIndicator.textContent();
@@ -69,7 +74,7 @@ public class ConsumerLoanSteps {
         return this;
     }
 
-
+    @Step("Wait for estimated monthly payment container")
     public ConsumerLoanSteps waitForPaymentContainer() {
         consumerLoanPage.estimatedMonthlyPaymentContainer
                 .waitFor(new Locator.WaitForOptions()
@@ -78,6 +83,7 @@ public class ConsumerLoanSteps {
         return this;
     }
 
+    @Step("Verify payment container contains currency symbol")
     public ConsumerLoanSteps verifyPaymentContainerHasCurrency() {
         if (!consumerLoanPage.estimatedMonthlyPaymentContainer.textContent().contains("₾")) {
             throw new AssertionError("Payment container does not contain currency symbol ₾");
@@ -85,7 +91,7 @@ public class ConsumerLoanSteps {
         return this;
     }
 
-
+    @Step("Assert monthly payment within tolerance: {tolerancePercent}")
     public ConsumerLoanSteps assertPaymentWithinTolerance(double tolerancePercent) {
         double principal = consumerLoanHelper.parsePrincipal();
         int termMonths = consumerLoanHelper.parseTermMonths();
@@ -102,5 +108,4 @@ public class ConsumerLoanSteps {
         }
         return this;
     }
-
 }

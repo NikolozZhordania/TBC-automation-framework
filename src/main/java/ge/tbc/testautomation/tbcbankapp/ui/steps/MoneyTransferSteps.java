@@ -5,12 +5,13 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import ge.tbc.testautomation.tbcbankapp.ui.pages.MoneyTransferPage;
 import ge.tbc.testautomation.tbcbankapp.ui.utils.StringHelper;
+import io.qameta.allure.Step;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.MONEY_TRANSFER_PAGE_URL;
+import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.URLs.*;
 
 public class MoneyTransferSteps {
 
@@ -24,6 +25,7 @@ public class MoneyTransferSteps {
         this.moneyTransferPage = new MoneyTransferPage(page);
     }
 
+    @Step("Verify Money Transfer page is opened")
     public MoneyTransferSteps verifyMoneyTransferPageOpened() {
         Locator header = moneyTransferPage.pageHeader;
         header.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
@@ -31,18 +33,20 @@ public class MoneyTransferSteps {
         return this;
     }
 
+    @Step("Verify Money Transfer page URL")
     public MoneyTransferSteps verifyMoneyTransferPageURL() {
-        assertThat(page).hasURL(MONEY_TRANSFER_PAGE_URL);
+        assertThat(page).hasURL(MONEY_TRANSFER_URL);
         return this;
     }
 
-
+    @Step("Wait for main transfer options to be visible")
     public MoneyTransferSteps waitForMainPageOptions() {
         moneyTransferPage.moneyTransferOptions.first()
                 .waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
         return this;
     }
 
+    @Step("Validate transfer options contain supported currencies")
     public MoneyTransferSteps validateMainPageOptionsCurrencies() {
         int count = moneyTransferPage.moneyTransferOptions.count();
         if (count == 0) throw new AssertionError("No transfer options found on main page.");
@@ -61,6 +65,7 @@ public class MoneyTransferSteps {
         return this;
     }
 
+    @Step("Store main page transfer options")
     public MoneyTransferSteps storeMainPageOptions() {
         mainPageOptions.clear();
 
@@ -76,7 +81,7 @@ public class MoneyTransferSteps {
         return this;
     }
 
-
+    @Step("Open commission calculator")
     public MoneyTransferSteps openCommissionCalculator() {
         Locator calculatorButton = moneyTransferPage.moneyTransferCommissionCalculator;
         calculatorButton.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
@@ -84,6 +89,7 @@ public class MoneyTransferSteps {
         return this;
     }
 
+    @Step("Enter transfer amount: {amount}")
     public MoneyTransferSteps enterTransferAmount(String amount) {
         Locator input = moneyTransferPage.moneyInputField;
         input.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
@@ -91,6 +97,7 @@ public class MoneyTransferSteps {
         return this;
     }
 
+    @Step("Open country dropdown")
     public MoneyTransferSteps openCountryDropdown() {
         Locator button = moneyTransferPage.countrySelectionButton;
         button.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
@@ -98,6 +105,7 @@ public class MoneyTransferSteps {
         return this;
     }
 
+    @Step("Choose country option: {country}")
     public MoneyTransferSteps chooseCountryOption(String country) {
         Locator countryOption = moneyTransferPage.countryOptions
                 .filter(new Locator.FilterOptions().setHasText(country));
@@ -109,11 +117,13 @@ public class MoneyTransferSteps {
         return this;
     }
 
+    @Step("Select country: {country}")
     public MoneyTransferSteps selectCountry(String country) {
         return openCountryDropdown()
                 .chooseCountryOption(country);
     }
 
+    @Step("Wait for skeleton loader to disappear")
     public MoneyTransferSteps waitForSkeletonToDisappear() {
         page.locator("tbcx-pw-money-transfer-system-card-loading")
                 .first()
@@ -124,6 +134,7 @@ public class MoneyTransferSteps {
         return this;
     }
 
+    @Step("Wait for calculator cards to become visible")
     public MoneyTransferSteps waitForCalculatorCardsVisible() {
         moneyTransferPage.moneyTransferCalculatorCards
                 .first()
@@ -134,12 +145,14 @@ public class MoneyTransferSteps {
         return this;
     }
 
+    @Step("Assert calculator cards are not empty")
     public MoneyTransferSteps assertCalculatorCardsNotEmpty() {
         int count = moneyTransferPage.moneyTransferCalculatorCards.count();
         if (count == 0) throw new AssertionError("No calculator results found.");
         return this;
     }
 
+    @Step("Store calculator options")
     public MoneyTransferSteps storeCalculatorOptions() {
         calculatorOptions.clear();
 
@@ -156,7 +169,7 @@ public class MoneyTransferSteps {
         return this;
     }
 
-
+    @Step("Assert stored calculator options are not empty")
     public MoneyTransferSteps assertCalculatorOptionsNotEmpty() {
         if (calculatorOptions.isEmpty()) {
             throw new AssertionError("Calculator options list is empty, nothing to validate.");
@@ -164,6 +177,7 @@ public class MoneyTransferSteps {
         return this;
     }
 
+    @Step("Assert each calculator option contains GEL commission")
     public MoneyTransferSteps assertEachCalculatorOptionHasGelCommission() {
         for (String calcOption : calculatorOptions) {
             String serviceName = calcOption.split(" ")[0];
@@ -174,6 +188,7 @@ public class MoneyTransferSteps {
         return this;
     }
 
+    @Step("Assert each calculator option exists on main page")
     public MoneyTransferSteps assertEachCalculatorOptionExistsOnMainPage() {
         for (String calcOption : calculatorOptions) {
             String serviceName = calcOption.split(" ")[0];
@@ -187,6 +202,7 @@ public class MoneyTransferSteps {
         return this;
     }
 
+    @Step("Compare lists and validate calculator results")
     public MoneyTransferSteps compareListsAndValidate() {
         return assertCalculatorOptionsNotEmpty()
                 .assertEachCalculatorOptionHasGelCommission()

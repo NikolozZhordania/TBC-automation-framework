@@ -6,7 +6,8 @@ import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
 
-public class PagesAPI {
+public class PagesAPI extends BaseAPIClient{
+
     public Response getPage(String pageId, String locale) {
         return given()
                 .baseUri(URI.BASE)

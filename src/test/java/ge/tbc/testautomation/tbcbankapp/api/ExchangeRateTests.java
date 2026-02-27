@@ -1,124 +1,99 @@
 package ge.tbc.testautomation.tbcbankapp.api;
 
 import ge.tbc.testautomation.tbcbankapp.api.steps.ExchangeRateSteps;
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import org.testng.annotations.Test;
 
+import static ge.tbc.testautomation.tbcbankapp.api.data.constants.ExchangeRateConstants.CurrencyPairs.*;
+import static ge.tbc.testautomation.tbcbankapp.api.data.constants.ExchangeRateConstants.ExpectedValues.*;
+import static ge.tbc.testautomation.tbcbankapp.api.data.constants.ExchangeRateConstants.InvalidCurrencies.*;
+import static ge.tbc.testautomation.tbcbankapp.api.data.constants.ExchangeRateConstants.LowercaseCurrencies.*;
+
+@Feature("Exchange Rate API")
 public class ExchangeRateTests {
 
     @Test(description = "USD/GEL returns HTTP 200")
+    @Story("Happy Path - Status Code")
+    @Description("Verify that fetching USD/GEL exchange rate returns HTTP 200 OK")
     public void usdGelReturns200Test() {
         new ExchangeRateSteps()
-                .fetchExchangeRate("USD", "GEL")
-                .validateStatusCode(200);
+                .fetchExchangeRate(USD, GEL)
+                .validateStatusCode(EXPECTED_STATUS_200);
     }
 
     @Test(description = "USD/GEL Content-Type is application/json")
+    @Story("Happy Path - Content Type")
+    @Description("Verify that fetching USD/GEL exchange rate returns Content-Type 'application/json'")
     public void usdGelContentTypeIsJsonTest() {
         new ExchangeRateSteps()
-                .fetchExchangeRate("USD", "GEL")
+                .fetchExchangeRate(USD, GEL)
                 .validateContentTypeIsJson();
     }
 
     @Test(description = "USD/GEL response time is under 2000ms")
+    @Story("Happy Path - Response Time")
+    @Description("Verify that USD/GEL API response time is less than 2 seconds")
     public void usdGelResponseTimeTest() {
         new ExchangeRateSteps()
-                .fetchExchangeRate("USD", "GEL")
-                .validateResponseTimeIsUnder(2000);
+                .fetchExchangeRate(USD, GEL)
+                .validateResponseTimeIsUnder(MAX_RESPONSE_TIME_MS);
     }
 
     @Test(description = "USD/GEL all mandatory fields are present")
+    @Story("Happy Path - Field Presence")
+    @Description("Verify that all mandatory fields are present in USD/GEL exchange rate response")
     public void usdGelAllFieldsPresentTest() {
         new ExchangeRateSteps()
-                .fetchExchangeRate("USD", "GEL")
+                .fetchExchangeRate(USD, GEL)
                 .validateAllFieldsArePresent();
     }
 
-    @Test(description = "USD/GEL iso1 matches requested currency")
-    public void usdGelIso1MatchesTest() {
+    @Test(description = "USD/GEL buyRate and sellRate validations")
+    @Story("Happy Path - Rate Validations")
+    @Description("Verify USD/GEL buyRate and sellRate are positive, sellRate > buyRate, and within reasonable GEL range")
+    public void usdGelRatesValidationTest() {
         new ExchangeRateSteps()
-                .fetchExchangeRate("USD", "GEL")
-                .validateIso1Equals("USD");
-    }
-
-    @Test(description = "USD/GEL iso2 matches requested currency")
-    public void usdGelIso2MatchesTest() {
-        new ExchangeRateSteps()
-                .fetchExchangeRate("USD", "GEL")
-                .validateIso2Equals("GEL");
-    }
-
-    @Test(description = "USD/GEL buyRate is positive")
-    public void usdGelBuyRateIsPositiveTest() {
-        new ExchangeRateSteps()
-                .fetchExchangeRate("USD", "GEL")
-                .validateBuyRateIsPositive();
-    }
-
-    @Test(description = "USD/GEL sellRate is positive")
-    public void usdGelSellRateIsPositiveTest() {
-        new ExchangeRateSteps()
-                .fetchExchangeRate("USD", "GEL")
-                .validateSellRateIsPositive();
-    }
-
-    @Test(description = "USD/GEL sellRate is greater than buyRate (bank spread)")
-    public void usdGelSellRateGreaterThanBuyRateTest() {
-        new ExchangeRateSteps()
-                .fetchExchangeRate("USD", "GEL")
-                .validateSellRateIsGreaterThanBuyRate();
-    }
-
-    @Test(description = "USD/GEL buyRate is within realistic GEL range")
-    public void usdGelBuyRateInRangeTest() {
-        new ExchangeRateSteps()
-                .fetchExchangeRate("USD", "GEL")
-                .validateBuyRateIsWithinReasonableRange();
-    }
-
-    @Test(description = "USD/GEL sellRate is within realistic GEL range")
-    public void usdGelSellRateInRangeTest() {
-        new ExchangeRateSteps()
-                .fetchExchangeRate("USD", "GEL")
+                .fetchExchangeRate(USD, GEL)
+                .validateBuyRateIsPositive()
+                .validateSellRateIsPositive()
+                .validateSellRateIsGreaterThanBuyRate()
+                .validateBuyRateIsWithinReasonableRange()
                 .validateSellRateIsWithinReasonableRange();
     }
 
-    @Test(description = "USD/GEL conversionType equals expected value")
-    public void usdGelConversionTypeTest() {
+    @Test(description = "USD/GEL conversionType and currencyWeight validations")
+    @Story("Happy Path - Metadata Validations")
+    @Description("Verify conversionType and currencyWeight for USD/GEL exchange rate")
+    public void usdGelMetadataValidationTest() {
         new ExchangeRateSteps()
-                .fetchExchangeRate("USD", "GEL")
-                .validateConversionType();
-    }
-
-    @Test(description = "USD/GEL currencyWeight is 1.0")
-    public void usdGelCurrencyWeightTest() {
-        new ExchangeRateSteps()
-                .fetchExchangeRate("USD", "GEL")
+                .fetchExchangeRate(USD, GEL)
+                .validateConversionType()
                 .validateCurrencyWeight();
     }
 
-    @Test(description = "USD/GEL updateDate is present and not empty")
-    public void usdGelUpdateDateIsPresentTest() {
+    @Test(description = "USD/GEL updateDate validations")
+    @Story("Happy Path - Update Date Validations")
+    @Description("Verify updateDate is present and follows ISO 8601 format for USD/GEL")
+    public void usdGelUpdateDateValidationTest() {
         new ExchangeRateSteps()
-                .fetchExchangeRate("USD", "GEL")
-                .validateUpdateDateIsNotEmpty();
-    }
-
-    @Test(description = "USD/GEL updateDate follows ISO 8601 format")
-    public void usdGelUpdateDateFormatTest() {
-        new ExchangeRateSteps()
-                .fetchExchangeRate("USD", "GEL")
+                .fetchExchangeRate(USD, GEL)
+                .validateUpdateDateIsNotEmpty()
                 .validateUpdateDateFormat();
     }
 
     @Test(description = "USD/GEL full happy path — all validations combined")
+    @Story("Happy Path - Full Validation")
+    @Description("Fetch USD/GEL and validate status, content type, fields, rates, conversionType, currencyWeight, and updateDate in one flow")
     public void usdGelFullValidationTest() {
         new ExchangeRateSteps()
-                .fetchExchangeRate("USD", "GEL")
-                .validateStatusCode(200)
+                .fetchExchangeRate(USD, GEL)
+                .validateStatusCode(EXPECTED_STATUS_200)
                 .validateContentTypeIsJson()
                 .validateAllFieldsArePresent()
-                .validateIso1Equals("USD")
-                .validateIso2Equals("GEL")
+                .validateIso1Equals(USD)
+                .validateIso2Equals(GEL)
                 .validateBuyRateIsPositive()
                 .validateSellRateIsPositive()
                 .validateSellRateIsGreaterThanBuyRate()
@@ -131,85 +106,107 @@ public class ExchangeRateTests {
     }
 
     @Test(description = "EUR/GEL happy path")
+    @Story("Happy Path - EUR/GEL")
+    @Description("Fetch EUR/GEL exchange rate and validate mandatory fields and rates")
     public void eurGelHappyPathTest() {
         new ExchangeRateSteps()
-                .fetchExchangeRate("EUR", "GEL")
-                .validateStatusCode(200)
+                .fetchExchangeRate(EUR, GEL)
+                .validateStatusCode(EXPECTED_STATUS_200)
                 .validateAllFieldsArePresent()
-                .validateIso1Equals("EUR")
-                .validateIso2Equals("GEL")
+                .validateIso1Equals(EUR)
+                .validateIso2Equals(GEL)
                 .validateBuyRateIsPositive()
                 .validateSellRateIsPositive()
                 .validateSellRateIsGreaterThanBuyRate();
     }
 
     @Test(description = "Invalid iso1 returns 4xx")
+    @Story("Error Path - Invalid iso1")
+    @Description("Verify API returns 4xx when iso1 parameter is invalid")
     public void invalidIso1ReturnsErrorTest() {
         new ExchangeRateSteps()
-                .fetchExchangeRateExpectingError("XXX", "GEL", 400)
-                .validateStatusCode(400);
+                .fetchExchangeRateExpectingError(INVALID_ISO1, GEL, EXPECTED_STATUS_400)
+                .validateStatusCode(EXPECTED_STATUS_400);
     }
 
     @Test(description = "Invalid iso2 returns 4xx")
+    @Story("Error Path - Invalid iso2")
+    @Description("Verify API returns 4xx when iso2 parameter is invalid")
     public void invalidIso2ReturnsErrorTest() {
         new ExchangeRateSteps()
-                .fetchExchangeRateExpectingError("USD", "ZZZ", 400)
-                .validateStatusCode(400);
+                .fetchExchangeRateExpectingError(USD, INVALID_ISO2, EXPECTED_STATUS_400)
+                .validateStatusCode(EXPECTED_STATUS_400);
     }
 
     @Test(description = "Both currencies invalid returns 4xx")
+    @Story("Error Path - Both Currencies Invalid")
+    @Description("Verify API returns 4xx when both iso1 and iso2 parameters are invalid")
     public void bothInvalidCurrenciesReturnErrorTest() {
         new ExchangeRateSteps()
-                .fetchExchangeRateExpectingError("XXX", "YYY", 400)
-                .validateStatusCode(400);
+                .fetchExchangeRateExpectingError(INVALID_BOTH_ISO1, INVALID_BOTH_ISO2, EXPECTED_STATUS_400)
+                .validateStatusCode(EXPECTED_STATUS_400);
     }
 
     @Test(description = "Missing iso1 param returns 4xx")
+    @Story("Error Path - Missing Parameters")
+    @Description("Verify API returns 4xx when iso1 parameter is missing")
     public void missingIso1ReturnsErrorTest() {
         new ExchangeRateSteps()
-                .fetchWithoutIso1("GEL")
-                .validateStatusCode(400);
+                .fetchWithoutIso1(GEL)
+                .validateStatusCode(EXPECTED_STATUS_400);
     }
 
     @Test(description = "Missing iso2 param returns 4xx")
+    @Story("Error Path - Missing Parameters")
+    @Description("Verify API returns 4xx when iso2 parameter is missing")
     public void missingIso2ReturnsErrorTest() {
         new ExchangeRateSteps()
-                .fetchWithoutIso2("USD")
-                .validateStatusCode(400);
+                .fetchWithoutIso2(USD)
+                .validateStatusCode(EXPECTED_STATUS_400);
     }
 
     @Test(description = "No params returns 4xx")
+    @Story("Error Path - Missing Parameters")
+    @Description("Verify API returns 4xx when both iso1 and iso2 parameters are missing")
     public void noParamsReturnErrorTest() {
         new ExchangeRateSteps()
                 .fetchWithNoParams()
-                .validateStatusCode(400);
+                .validateStatusCode(EXPECTED_STATUS_400);
     }
 
     @Test(description = "Numeric currency code returns 4xx")
+    @Story("Error Path - Invalid Format")
+    @Description("Verify API returns 4xx when numeric currency code is provided")
     public void numericCurrencyCodeReturnsErrorTest() {
         new ExchangeRateSteps()
-                .fetchExchangeRateExpectingError("123", "GEL", 400)
-                .validateStatusCode(400);
+                .fetchExchangeRateExpectingError(NUMERIC_CODE, GEL, EXPECTED_STATUS_400)
+                .validateStatusCode(EXPECTED_STATUS_400);
     }
 
     @Test(description = "Empty string currency code returns 4xx")
+    @Story("Error Path - Invalid Format")
+    @Description("Verify API returns 4xx when empty string currency code is provided")
     public void emptyCurrencyCodeReturnsErrorTest() {
         new ExchangeRateSteps()
-                .fetchExchangeRateExpectingError("", "GEL", 400)
-                .validateStatusCode(400);
+                .fetchExchangeRateExpectingError(EMPTY_CODE, GEL, EXPECTED_STATUS_400)
+                .validateStatusCode(EXPECTED_STATUS_400);
     }
 
     @Test(description = "Lowercase currency code is accepted or handled gracefully")
+    @Story("Edge Case - Lowercase Handling")
+    @Description("Verify API accepts lowercase currency codes and returns 200")
     public void lowercaseCurrencyCodeTest() {
         new ExchangeRateSteps()
-                .fetchExchangeRate("usd", "gel")
-                .validateStatusCode(200);
+                .fetchExchangeRate(USD_LOWER, GEL_LOWER)
+                .validateStatusCode(EXPECTED_STATUS_200);
     }
 
     @Test(description = "Same currency pair (GEL/GEL) returns 4xx")
+    @Story("Error Path - Same Currency Pair")
+    @Description("Verify API returns 4xx when both currencies are the same")
     public void sameCurrencyPairReturnsErrorTest() {
         new ExchangeRateSteps()
-                .fetchExchangeRateExpectingError("GEL", "GEL", 400)
-                .validateStatusCode(400);
+                .fetchExchangeRateExpectingError(GEL, GEL, EXPECTED_STATUS_400)
+                .validateStatusCode(EXPECTED_STATUS_400);
     }
 }
