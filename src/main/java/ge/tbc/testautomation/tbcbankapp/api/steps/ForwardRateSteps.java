@@ -26,15 +26,14 @@ public class ForwardRateSteps {
                 .statusCode(200)
                 .extract()
                 .as(ForwardRateResponse.class);
-        System.out.printf("Fetched forward rates for locale: %s — %d currency groups found%n",
+        System.out.printf("Fetched forward rates for locale: %s — %d currency groups%n",
                 locale, forwardRatesResponse.getRates().size());
         return this;
     }
 
     public ForwardRateSteps fetchForwardRatesExpectingError(String locale, int expectedStatusCode) {
         this.rawResponse = api.getForwardRatesWithInvalidLocale(locale);
-        rawResponse.then().statusCode(expectedStatusCode);
-        System.out.printf("Received expected status %d for locale: %s%n", expectedStatusCode, locale);
+        System.out.printf("Received %d for locale: %s%n", rawResponse.statusCode(), locale);
         return this;
     }
 
@@ -44,60 +43,82 @@ public class ForwardRateSteps {
     }
 
     public ForwardRateSteps validateStatusCode(int expectedCode) {
-        assertThat("Status code mismatch", rawResponse.statusCode(), equalTo(expectedCode));
+        assertThat("Status code", rawResponse.statusCode(), equalTo(expectedCode));
         return this;
     }
 
     public ForwardRateSteps validateContentTypeIsJson() {
-        assertThat("Content-Type should be JSON",
-                rawResponse.contentType(), containsString("application/json"));
+        assertThat("Content-Type", rawResponse.contentType(), containsString("application/json"));
+        return this;
+    }
+
+    public ForwardRateSteps validateResponseTimeIsUnder(long maxMillis) {
+        assertThat(
+                String.format("Response time %dms exceeds limit of %dms", rawResponse.getTime(), maxMillis),
+                rawResponse.getTime(), lessThan(maxMillis)
+        );
+        return this;
+    }
+
+    public ForwardRateSteps validateRatesListIsNotNull() {
+        assertThat("rates list must not be null", forwardRatesResponse.getRates(), notNullValue());
         return this;
     }
 
     public ForwardRateSteps validateRatesListIsNotEmpty() {
-        assertThat("rates list must not be null", forwardRatesResponse.getRates(), notNullValue());
         assertThat("rates list must not be empty", forwardRatesResponse.getRates(), not(empty()));
         return this;
     }
 
     public ForwardRateSteps validateRatesCountEquals(int expectedCount) {
-        assertThat("Unexpected number of currency groups in rates",
+        assertThat("Number of currency groups",
                 forwardRatesResponse.getRates().size(), equalTo(expectedCount));
         return this;
     }
 
-    public ForwardRateSteps validateUpdateDateIsPresent() {
+    public ForwardRateSteps validateUpdateDateIsNotNull() {
         assertThat("updateDate must not be null", forwardRatesResponse.getUpdateDate(), notNullValue());
+        return this;
+    }
+
+    public ForwardRateSteps validateUpdateDateIsNotEmpty() {
         assertThat("updateDate must not be empty", forwardRatesResponse.getUpdateDate(), not(emptyString()));
         return this;
     }
 
     public ForwardRateSteps validateUpdateDateFormat() {
-        assertThat("updateDate should match ISO 8601 format",
-                forwardRatesResponse.getUpdateDate(), matchesPattern("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.*"));
+        assertThat("updateDate ISO 8601 format",
+                forwardRatesResponse.getUpdateDate(),
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.*"));
         return this;
     }
 
+    // Convenience composite
+    public ForwardRateSteps validateUpdateDateIsPresent() {
+        return validateUpdateDateIsNotNull().validateUpdateDateIsNotEmpty();
+    }
 
     public ForwardRateSteps validateCurrencyGroupExists(String isoCode) {
         boolean exists = forwardRatesResponse.getRates().stream()
                 .anyMatch(r -> isoCode.equalsIgnoreCase(r.getIso()));
-        assertThat(String.format("Currency group '%s' should exist in response", isoCode), exists, is(true));
+        assertThat(String.format("Currency group '%s' should exist", isoCode), exists, is(true));
         return this;
     }
 
     public ForwardRateSteps validateAllCurrencyGroupsHaveIsoCode() {
         forwardRatesResponse.getRates().forEach(group -> {
-            assertThat("iso field in currency group must not be null", group.getIso(), notNullValue());
+            assertThat("iso field must not be null", group.getIso(), notNullValue());
             assertThat("iso field must not be empty", group.getIso(), not(emptyString()));
         });
         return this;
     }
 
-    public ForwardRateSteps validateEachCurrencyHasExpectedPeriodCount(String isoCode) {
-        CurrencyForwardRates group = getCurrencyGroup(isoCode);
-        assertThat(String.format("%s should have %d forward rate periods", isoCode, ExpectedPeriods.EXPECTED_PERIOD_COUNT),
-                group.getForwardRates().size(), equalTo(ExpectedPeriods.EXPECTED_PERIOD_COUNT));
+    public ForwardRateSteps validatePeriodCount(String isoCode) {
+        assertThat(
+                String.format("%s should have %d periods", isoCode, ExpectedPeriods.EXPECTED_PERIOD_COUNT),
+                getCurrencyGroup(isoCode).getForwardRates().size(),
+                equalTo(ExpectedPeriods.EXPECTED_PERIOD_COUNT)
+        );
         return this;
     }
 
@@ -105,20 +126,20 @@ public class ForwardRateSteps {
         List<ForwardRate> rates = getCurrencyGroup(isoCode).getForwardRates();
         for (int i = 1; i < rates.size(); i++) {
             assertThat(
-                    String.format("Day at index %d should be greater than at index %d", i, i - 1),
+                    String.format("Day[%d] should be > Day[%d]", i, i - 1),
                     rates.get(i).getDay(), greaterThan(rates.get(i - 1).getDay())
             );
         }
         return this;
     }
 
-    public ForwardRateSteps validateExpectedDaysForCurrency(String isoCode) {
+    public ForwardRateSteps validateExpectedDays(String isoCode) {
         List<ForwardRate> rates = getCurrencyGroup(isoCode).getForwardRates();
         int[] expectedDays = ExpectedPeriods.EXPECTED_DAYS;
         assertThat("Period count mismatch", rates.size(), equalTo(expectedDays.length));
         for (int i = 0; i < expectedDays.length; i++) {
             assertThat(
-                    String.format("Day at index %d should be %d", i, expectedDays[i]),
+                    String.format("Day[%d] should be %d", i, expectedDays[i]),
                     rates.get(i).getDay(), equalTo(expectedDays[i])
             );
         }
@@ -127,99 +148,104 @@ public class ForwardRateSteps {
 
     public ForwardRateSteps validateAllForwardRateFieldsAreNotNull(String isoCode) {
         getCurrencyGroup(isoCode).getForwardRates().forEach(rate -> {
-            assertThat("iso1 must not be null", rate.getIso1(), notNullValue());
-            assertThat("iso2 must not be null", rate.getIso2(), notNullValue());
-            assertThat("period must not be null", rate.getPeriod(), notNullValue());
-            assertThat("day must not be null", rate.getDay(), notNullValue());
-            assertThat("bidForwardPoint must not be null", rate.getBidForwardPoint(), notNullValue());
-            assertThat("bidForwardInterest must not be null", rate.getBidForwardInterest(), notNullValue());
-            assertThat("bidForwardRate must not be null", rate.getBidForwardRate(), notNullValue());
-            assertThat("askForwardPoint must not be null", rate.getAskForwardPoint(), notNullValue());
-            assertThat("askForwardInterest must not be null", rate.getAskForwardInterest(), notNullValue());
-            assertThat("askForwardRate must not be null", rate.getAskForwardRate(), notNullValue());
+            assertThat("iso1",               rate.getIso1(),               notNullValue());
+            assertThat("iso2",               rate.getIso2(),               notNullValue());
+            assertThat("period",             rate.getPeriod(),             notNullValue());
+            assertThat("day",                rate.getDay(),                notNullValue());
+            assertThat("bidForwardPoint",    rate.getBidForwardPoint(),    notNullValue());
+            assertThat("bidForwardInterest", rate.getBidForwardInterest(), notNullValue());
+            assertThat("bidForwardRate",     rate.getBidForwardRate(),     notNullValue());
+            assertThat("askForwardPoint",    rate.getAskForwardPoint(),    notNullValue());
+            assertThat("askForwardInterest", rate.getAskForwardInterest(), notNullValue());
+            assertThat("askForwardRate",     rate.getAskForwardRate(),     notNullValue());
         });
         return this;
     }
 
-    public ForwardRateSteps validateIsoCodesInsideForwardRates(String isoCode) {
-        getCurrencyGroup(isoCode).getForwardRates().forEach(rate -> {
-            assertThat("iso1 inside forwardRate should match parent currency",
-                    rate.getIso1(), equalToIgnoringCase(isoCode));
-            assertThat("iso2 inside forwardRate should be GEL",
-                    rate.getIso2(), equalTo(Currencies.GEL));
-        });
+
+    public ForwardRateSteps validateIso1InsideRatesEquals(String isoCode) {
+        getCurrencyGroup(isoCode).getForwardRates().forEach(rate ->
+                assertThat("iso1 should match parent currency",
+                        rate.getIso1(), equalToIgnoringCase(isoCode))
+        );
+        return this;
+    }
+
+    public ForwardRateSteps validateIso2InsideRatesIsGel(String isoCode) {
+        getCurrencyGroup(isoCode).getForwardRates().forEach(rate ->
+                assertThat("iso2 should be GEL",
+                        rate.getIso2(), equalTo(Currencies.GEL))
+        );
         return this;
     }
 
     public ForwardRateSteps validateAskRateIsAlwaysGreaterThanBidRate(String isoCode) {
-        getCurrencyGroup(isoCode).getForwardRates().forEach(rate -> {
-            assertThat(
-                    String.format("askForwardRate should be > bidForwardRate for period '%s'", rate.getPeriod()),
-                    rate.getAskForwardRate(), greaterThan(rate.getBidForwardRate())
-            );
-        });
+        getCurrencyGroup(isoCode).getForwardRates().forEach(rate ->
+                assertThat(
+                        String.format("askForwardRate > bidForwardRate for period '%s'", rate.getPeriod()),
+                        rate.getAskForwardRate(), greaterThan(rate.getBidForwardRate())
+                )
+        );
         return this;
     }
 
     public ForwardRateSteps validateAskPointIsAlwaysGreaterThanBidPoint(String isoCode) {
-        getCurrencyGroup(isoCode).getForwardRates().forEach(rate -> {
-            assertThat(
-                    String.format("askForwardPoint should be > bidForwardPoint for period '%s'", rate.getPeriod()),
-                    rate.getAskForwardPoint(), greaterThan(rate.getBidForwardPoint())
-            );
-        });
+        getCurrencyGroup(isoCode).getForwardRates().forEach(rate ->
+                assertThat(
+                        String.format("askForwardPoint > bidForwardPoint for period '%s'", rate.getPeriod()),
+                        rate.getAskForwardPoint(), greaterThan(rate.getBidForwardPoint())
+                )
+        );
         return this;
     }
 
     public ForwardRateSteps validateAskInterestIsAlwaysGreaterThanBidInterest(String isoCode) {
-        getCurrencyGroup(isoCode).getForwardRates().forEach(rate -> {
-            assertThat(
-                    String.format("askForwardInterest should be > bidForwardInterest for period '%s'", rate.getPeriod()),
-                    rate.getAskForwardInterest(), greaterThan(rate.getBidForwardInterest())
-            );
-        });
+        getCurrencyGroup(isoCode).getForwardRates().forEach(rate ->
+                assertThat(
+                        String.format("askForwardInterest > bidForwardInterest for period '%s'", rate.getPeriod()),
+                        rate.getAskForwardInterest(), greaterThan(rate.getBidForwardInterest())
+                )
+        );
         return this;
     }
 
     public ForwardRateSteps validateForwardRatesArePositive(String isoCode) {
         getCurrencyGroup(isoCode).getForwardRates().forEach(rate -> {
-            assertThat("bidForwardRate must be positive", rate.getBidForwardRate(),
-                    greaterThan(ExpectedRates.MIN_FORWARD_RATE));
-            assertThat("askForwardRate must be positive", rate.getAskForwardRate(),
-                    greaterThan(ExpectedRates.MIN_FORWARD_RATE));
+            assertThat("bidForwardRate must be positive",
+                    rate.getBidForwardRate(), greaterThan(ExpectedRates.MIN_FORWARD_RATE));
+            assertThat("askForwardRate must be positive",
+                    rate.getAskForwardRate(), greaterThan(ExpectedRates.MIN_FORWARD_RATE));
         });
         return this;
     }
 
-    public ForwardRateSteps validateForwardPointsArePositive(String isoCode) {
+    public ForwardRateSteps validateForwardPointsAreNonNegative(String isoCode) {
         getCurrencyGroup(isoCode).getForwardRates().forEach(rate -> {
-            assertThat("bidForwardPoint must be >= 0", rate.getBidForwardPoint(),
-                    greaterThanOrEqualTo(ExpectedRates.MIN_FORWARD_POINT));
-            assertThat("askForwardPoint must be >= 0", rate.getAskForwardPoint(),
-                    greaterThanOrEqualTo(ExpectedRates.MIN_FORWARD_POINT));
+            assertThat("bidForwardPoint must be >= 0",
+                    rate.getBidForwardPoint(), greaterThanOrEqualTo(ExpectedRates.MIN_FORWARD_POINT));
+            assertThat("askForwardPoint must be >= 0",
+                    rate.getAskForwardPoint(), greaterThanOrEqualTo(ExpectedRates.MIN_FORWARD_POINT));
         });
         return this;
     }
 
     public ForwardRateSteps validateForwardInterestRatesAreWithinRange(String isoCode) {
         getCurrencyGroup(isoCode).getForwardRates().forEach(rate -> {
-            assertThat("bidForwardInterest should be within range",
-                    rate.getBidForwardInterest(), both(
-                            greaterThanOrEqualTo(ExpectedRates.MIN_FORWARD_INTEREST))
+            assertThat("bidForwardInterest out of range", rate.getBidForwardInterest(),
+                    both(greaterThanOrEqualTo(ExpectedRates.MIN_FORWARD_INTEREST))
                             .and(lessThanOrEqualTo(ExpectedRates.MAX_FORWARD_INTEREST)));
-            assertThat("askForwardInterest should be within range",
-                    rate.getAskForwardInterest(), both(
-                            greaterThanOrEqualTo(ExpectedRates.MIN_FORWARD_INTEREST))
+            assertThat("askForwardInterest out of range", rate.getAskForwardInterest(),
+                    both(greaterThanOrEqualTo(ExpectedRates.MIN_FORWARD_INTEREST))
                             .and(lessThanOrEqualTo(ExpectedRates.MAX_FORWARD_INTEREST)));
         });
         return this;
     }
 
-    public ForwardRateSteps validateBidForwardRatesIncreaseOverTime(String isoCode) {
+    public ForwardRateSteps validateBidRatesIncreaseOverTime(String isoCode) {
         List<ForwardRate> rates = getCurrencyGroup(isoCode).getForwardRates();
         for (int i = 1; i < rates.size(); i++) {
             assertThat(
-                    String.format("bidForwardRate should increase at period '%s' vs '%s'",
+                    String.format("bidForwardRate should increase: '%s' > '%s'",
                             rates.get(i).getPeriod(), rates.get(i - 1).getPeriod()),
                     rates.get(i).getBidForwardRate(), greaterThan(rates.get(i - 1).getBidForwardRate())
             );
@@ -227,11 +253,11 @@ public class ForwardRateSteps {
         return this;
     }
 
-    public ForwardRateSteps validateAskForwardRatesIncreaseOverTime(String isoCode) {
+    public ForwardRateSteps validateAskRatesIncreaseOverTime(String isoCode) {
         List<ForwardRate> rates = getCurrencyGroup(isoCode).getForwardRates();
         for (int i = 1; i < rates.size(); i++) {
             assertThat(
-                    String.format("askForwardRate should increase at period '%s' vs '%s'",
+                    String.format("askForwardRate should increase: '%s' > '%s'",
                             rates.get(i).getPeriod(), rates.get(i - 1).getPeriod()),
                     rates.get(i).getAskForwardRate(), greaterThan(rates.get(i - 1).getAskForwardRate())
             );
@@ -239,20 +265,11 @@ public class ForwardRateSteps {
         return this;
     }
 
-
-    public ForwardRateSteps validateResponseTimeIsUnder(long maxMillis) {
-        long responseTime = rawResponse.getTime();
-        assertThat(String.format("Response time %d ms should be under %d ms", responseTime, maxMillis),
-                responseTime, lessThan(maxMillis));
-        return this;
-    }
-
     private CurrencyForwardRates getCurrencyGroup(String isoCode) {
         Optional<CurrencyForwardRates> group = forwardRatesResponse.getRates().stream()
                 .filter(r -> isoCode.equalsIgnoreCase(r.getIso()))
                 .findFirst();
-        assertThat(String.format("Currency group '%s' not found in response", isoCode),
-                group.isPresent(), is(true));
+        assertThat(String.format("Currency group '%s' not found", isoCode), group.isPresent(), is(true));
         return group.get();
     }
 }

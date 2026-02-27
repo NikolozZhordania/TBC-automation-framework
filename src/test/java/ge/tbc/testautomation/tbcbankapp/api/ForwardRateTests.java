@@ -10,255 +10,273 @@ import static ge.tbc.testautomation.tbcbankapp.api.data.constants.ForwardRateCon
 
 public class ForwardRateTests {
 
-    @Test(description = "TC-FR-01: Verify getForwardRates with ka-GE locale returns 200")
+    @Test(description = "ka-GE locale returns HTTP 200")
     public void forwardRatesKaGeReturns200Test() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateStatusCode(200);
     }
 
-    @Test(description = "TC-FR-02: Verify response Content-Type is application/json")
+    @Test(description = "Content-Type is application/json")
     public void forwardRatesContentTypeIsJsonTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateContentTypeIsJson();
     }
-    @Test(description = "TC-FR-03: Verify rates list is not empty")
+
+    @Test(description = "Response time is under 3000ms")
+    public void forwardRatesResponseTimeTest() {
+        new ForwardRateSteps()
+                .fetchForwardRates(KA_GE)
+                .validateResponseTimeIsUnder(3000);
+    }
+
+    @Test(description = "Rates list is not empty")
     public void forwardRatesListNotEmptyTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateRatesListIsNotEmpty();
     }
 
-    @Test(description = "TC-FR-04: Verify response contains exactly 2 currency groups (EUR and USD)")
+    @Test(description = "Response contains exactly 2 currency groups (EUR and USD)")
     public void forwardRatesContainsTwoCurrencyGroupsTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateRatesCountEquals(2);
     }
 
-    @Test(description = "TC-FR-05: Verify EUR currency group exists in response")
-    public void forwardRatesEurGroupExistsTest() {
-        new ForwardRateSteps()
-                .fetchForwardRates(KA_GE)
-                .validateCurrencyGroupExists(EUR);
-    }
-
-    @Test(description = "TC-FR-06: Verify USD currency group exists in response")
-    public void forwardRatesUsdGroupExistsTest() {
-        new ForwardRateSteps()
-                .fetchForwardRates(KA_GE)
-                .validateCurrencyGroupExists(USD);
-    }
-
-    @Test(description = "TC-FR-07: Verify updateDate is present and not empty")
+    @Test(description = "updateDate is present and not empty")
     public void forwardRatesUpdateDatePresentTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateUpdateDateIsPresent();
     }
 
-    @Test(description = "TC-FR-08: Verify updateDate follows ISO 8601 format")
+    @Test(description = "updateDate follows ISO 8601 format")
     public void forwardRatesUpdateDateFormatTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateUpdateDateFormat();
     }
 
-    @Test(description = "TC-FR-09: Verify all currency groups have non-empty iso codes")
+    @Test(description = "EUR currency group exists in response")
+    public void forwardRatesEurGroupExistsTest() {
+        new ForwardRateSteps()
+                .fetchForwardRates(KA_GE)
+                .validateCurrencyGroupExists(EUR);
+    }
+
+    @Test(description = "USD currency group exists in response")
+    public void forwardRatesUsdGroupExistsTest() {
+        new ForwardRateSteps()
+                .fetchForwardRates(KA_GE)
+                .validateCurrencyGroupExists(USD);
+    }
+
+    @Test(description = "All currency groups have non-empty iso codes")
     public void forwardRatesAllGroupsHaveIsoCodeTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateAllCurrencyGroupsHaveIsoCode();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Happy Path — EUR Period Count & Days
-    // ─────────────────────────────────────────────────────────────────────────
-
-    @Test(description = "TC-FR-10: Verify EUR has exactly 9 forward rate periods")
+    @Test(description = "EUR has exactly 9 forward rate periods")
     public void eurHasExpectedPeriodCountTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
-                .validateEachCurrencyHasExpectedPeriodCount(EUR);
+                .validatePeriodCount(EUR);
     }
 
-    @Test(description = "TC-FR-11: Verify EUR period days are in ascending order")
+    @Test(description = "EUR period days are in ascending order")
     public void eurPeriodsAreAscendingTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validatePeriodsAreInAscendingDayOrder(EUR);
     }
 
-    @Test(description = "TC-FR-12: Verify EUR period days match expected values: 7,14,31,60,91,181,273,365,730")
+    @Test(description = "EUR period days match expected values: 7,14,31,60,91,181,273,365,730")
     public void eurExpectedDaysMatchTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
-                .validateExpectedDaysForCurrency(EUR);
+                .validateExpectedDays(EUR);
     }
 
-    @Test(description = "TC-FR-13: Verify USD has exactly 9 forward rate periods")
-    public void usdHasExpectedPeriodCountTest() {
-        new ForwardRateSteps()
-                .fetchForwardRates(KA_GE)
-                .validateEachCurrencyHasExpectedPeriodCount(USD);
-    }
-
-    @Test(description = "TC-FR-14: Verify USD period days are in ascending order")
-    public void usdPeriodsAreAscendingTest() {
-        new ForwardRateSteps()
-                .fetchForwardRates(KA_GE)
-                .validatePeriodsAreInAscendingDayOrder(USD);
-    }
-
-    @Test(description = "TC-FR-15: Verify USD period days match expected values: 7,14,31,60,91,181,273,365,730")
-    public void usdExpectedDaysMatchTest() {
-        new ForwardRateSteps()
-                .fetchForwardRates(KA_GE)
-                .validateExpectedDaysForCurrency(USD);
-    }
-
-    @Test(description = "TC-FR-16: Verify all EUR forward rate fields are non-null")
+    @Test(description = "EUR all forward rate fields are non-null")
     public void eurAllFieldsNonNullTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateAllForwardRateFieldsAreNotNull(EUR);
     }
 
-    @Test(description = "TC-FR-17: Verify EUR forward rate iso1 is EUR and iso2 is GEL")
-    public void eurIsoCodesInsideRatesTest() {
+    @Test(description = "EUR iso1 is EUR inside forward rates")
+    public void eurIso1InsideRatesTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
-                .validateIsoCodesInsideForwardRates(EUR);
+                .validateIso1InsideRatesEquals(EUR);
     }
 
-    @Test(description = "TC-FR-18: Verify EUR askForwardRate > bidForwardRate for all periods")
+    @Test(description = "EUR iso2 is GEL inside forward rates")
+    public void eurIso2InsideRatesTest() {
+        new ForwardRateSteps()
+                .fetchForwardRates(KA_GE)
+                .validateIso2InsideRatesIsGel(EUR);
+    }
+
+    @Test(description = "EUR askForwardRate > bidForwardRate for all periods")
     public void eurAskRateGreaterThanBidRateTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateAskRateIsAlwaysGreaterThanBidRate(EUR);
     }
 
-    @Test(description = "TC-FR-19: Verify EUR askForwardPoint > bidForwardPoint for all periods")
+    @Test(description = "EUR askForwardPoint > bidForwardPoint for all periods")
     public void eurAskPointGreaterThanBidPointTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateAskPointIsAlwaysGreaterThanBidPoint(EUR);
     }
 
-    @Test(description = "TC-FR-20: Verify EUR askForwardInterest > bidForwardInterest for all periods")
+    @Test(description = "EUR askForwardInterest > bidForwardInterest for all periods")
     public void eurAskInterestGreaterThanBidInterestTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateAskInterestIsAlwaysGreaterThanBidInterest(EUR);
     }
 
-    @Test(description = "TC-FR-21: Verify EUR bid/ask forward rates are positive")
+    @Test(description = "EUR bid/ask forward rates are positive")
     public void eurForwardRatesArePositiveTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateForwardRatesArePositive(EUR);
     }
 
-    @Test(description = "TC-FR-22: Verify EUR forward points are non-negative")
+    @Test(description = "EUR forward points are non-negative")
     public void eurForwardPointsAreNonNegativeTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
-                .validateForwardPointsArePositive(EUR);
+                .validateForwardPointsAreNonNegative(EUR);
     }
 
-    @Test(description = "TC-FR-23: Verify EUR forward interest rates are within 0–20% range")
+    @Test(description = "EUR forward interest rates are within 0–20% range")
     public void eurForwardInterestWithinRangeTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateForwardInterestRatesAreWithinRange(EUR);
     }
 
-    @Test(description = "TC-FR-24: Verify all USD forward rate fields are non-null")
+    @Test(description = "EUR bidForwardRate increases with longer durations")
+    public void eurBidRatesIncreaseOverTimeTest() {
+        new ForwardRateSteps()
+                .fetchForwardRates(KA_GE)
+                .validateBidRatesIncreaseOverTime(EUR);
+    }
+
+    @Test(description = "EUR askForwardRate increases with longer durations")
+    public void eurAskRatesIncreaseOverTimeTest() {
+        new ForwardRateSteps()
+                .fetchForwardRates(KA_GE)
+                .validateAskRatesIncreaseOverTime(EUR);
+    }
+
+    @Test(description = "USD has exactly 9 forward rate periods")
+    public void usdHasExpectedPeriodCountTest() {
+        new ForwardRateSteps()
+                .fetchForwardRates(KA_GE)
+                .validatePeriodCount(USD);
+    }
+
+    @Test(description = "USD period days are in ascending order")
+    public void usdPeriodsAreAscendingTest() {
+        new ForwardRateSteps()
+                .fetchForwardRates(KA_GE)
+                .validatePeriodsAreInAscendingDayOrder(USD);
+    }
+
+    @Test(description = "USD period days match expected values: 7,14,31,60,91,181,273,365,730")
+    public void usdExpectedDaysMatchTest() {
+        new ForwardRateSteps()
+                .fetchForwardRates(KA_GE)
+                .validateExpectedDays(USD);
+    }
+
+    @Test(description = "USD all forward rate fields are non-null")
     public void usdAllFieldsNonNullTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateAllForwardRateFieldsAreNotNull(USD);
     }
 
-    @Test(description = "TC-FR-25: Verify USD forward rate iso1 is USD and iso2 is GEL")
-    public void usdIsoCodesInsideRatesTest() {
+    @Test(description = "USD iso1 is USD inside forward rates")
+    public void usdIso1InsideRatesTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
-                .validateIsoCodesInsideForwardRates(USD);
+                .validateIso1InsideRatesEquals(USD);
     }
 
-    @Test(description = "TC-FR-26: Verify USD askForwardRate > bidForwardRate for all periods")
+    @Test(description = "USD iso2 is GEL inside forward rates")
+    public void usdIso2InsideRatesTest() {
+        new ForwardRateSteps()
+                .fetchForwardRates(KA_GE)
+                .validateIso2InsideRatesIsGel(USD);
+    }
+
+    @Test(description = "USD askForwardRate > bidForwardRate for all periods")
     public void usdAskRateGreaterThanBidRateTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateAskRateIsAlwaysGreaterThanBidRate(USD);
     }
 
-    @Test(description = "TC-FR-27: Verify USD askForwardPoint > bidForwardPoint for all periods")
+    @Test(description = "USD askForwardPoint > bidForwardPoint for all periods")
     public void usdAskPointGreaterThanBidPointTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateAskPointIsAlwaysGreaterThanBidPoint(USD);
     }
 
-    @Test(description = "TC-FR-28: Verify USD askForwardInterest > bidForwardInterest for all periods")
+    @Test(description = "USD askForwardInterest > bidForwardInterest for all periods")
     public void usdAskInterestGreaterThanBidInterestTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateAskInterestIsAlwaysGreaterThanBidInterest(USD);
     }
 
-    @Test(description = "TC-FR-29: Verify USD bid/ask forward rates are positive")
+    @Test(description = "USD bid/ask forward rates are positive")
     public void usdForwardRatesArePositiveTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateForwardRatesArePositive(USD);
     }
 
-    @Test(description = "TC-FR-30: Verify USD forward points are non-negative")
+    @Test(description = "USD forward points are non-negative")
     public void usdForwardPointsAreNonNegativeTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
-                .validateForwardPointsArePositive(USD);
+                .validateForwardPointsAreNonNegative(USD);
     }
 
-    @Test(description = "TC-FR-31: Verify USD forward interest rates are within 0–20% range")
+    @Test(description = "USD forward interest rates are within 0–20% range")
     public void usdForwardInterestWithinRangeTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
                 .validateForwardInterestRatesAreWithinRange(USD);
     }
 
-    @Test(description = "TC-FR-32: Verify EUR bidForwardRate increases with longer durations")
-    public void eurBidRatesIncreaseOverTimeTest() {
-        new ForwardRateSteps()
-                .fetchForwardRates(KA_GE)
-                .validateBidForwardRatesIncreaseOverTime(EUR);
-    }
-
-    @Test(description = "TC-FR-33: Verify EUR askForwardRate increases with longer durations")
-    public void eurAskRatesIncreaseOverTimeTest() {
-        new ForwardRateSteps()
-                .fetchForwardRates(KA_GE)
-                .validateAskForwardRatesIncreaseOverTime(EUR);
-    }
-
-    @Test(description = "TC-FR-34: Verify USD bidForwardRate increases with longer durations")
+    @Test(description = "USD bidForwardRate increases with longer durations")
     public void usdBidRatesIncreaseOverTimeTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
-                .validateBidForwardRatesIncreaseOverTime(USD);
+                .validateBidRatesIncreaseOverTime(USD);
     }
 
-    @Test(description = "TC-FR-35: Verify USD askForwardRate increases with longer durations")
+    @Test(description = "USD askForwardRate increases with longer durations")
     public void usdAskRatesIncreaseOverTimeTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
-                .validateAskForwardRatesIncreaseOverTime(USD);
+                .validateAskRatesIncreaseOverTime(USD);
     }
 
-    @Test(description = "TC-FR-36: Full happy path — EUR all validations combined")
+    @Test(description = "EUR full happy path — all validations combined")
     public void eurFullValidationTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
@@ -266,22 +284,23 @@ public class ForwardRateTests {
                 .validateContentTypeIsJson()
                 .validateRatesListIsNotEmpty()
                 .validateCurrencyGroupExists(EUR)
-                .validateEachCurrencyHasExpectedPeriodCount(EUR)
-                .validateExpectedDaysForCurrency(EUR)
+                .validatePeriodCount(EUR)
+                .validateExpectedDays(EUR)
                 .validatePeriodsAreInAscendingDayOrder(EUR)
                 .validateAllForwardRateFieldsAreNotNull(EUR)
-                .validateIsoCodesInsideForwardRates(EUR)
+                .validateIso1InsideRatesEquals(EUR)
+                .validateIso2InsideRatesIsGel(EUR)
                 .validateAskRateIsAlwaysGreaterThanBidRate(EUR)
                 .validateAskPointIsAlwaysGreaterThanBidPoint(EUR)
                 .validateAskInterestIsAlwaysGreaterThanBidInterest(EUR)
                 .validateForwardRatesArePositive(EUR)
-                .validateForwardPointsArePositive(EUR)
+                .validateForwardPointsAreNonNegative(EUR)
                 .validateForwardInterestRatesAreWithinRange(EUR)
-                .validateBidForwardRatesIncreaseOverTime(EUR)
-                .validateAskForwardRatesIncreaseOverTime(EUR);
+                .validateBidRatesIncreaseOverTime(EUR)
+                .validateAskRatesIncreaseOverTime(EUR);
     }
 
-    @Test(description = "TC-FR-37: Full happy path — USD all validations combined")
+    @Test(description = "USD full happy path — all validations combined")
     public void usdFullValidationTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(KA_GE)
@@ -289,48 +308,44 @@ public class ForwardRateTests {
                 .validateContentTypeIsJson()
                 .validateRatesListIsNotEmpty()
                 .validateCurrencyGroupExists(USD)
-                .validateEachCurrencyHasExpectedPeriodCount(USD)
-                .validateExpectedDaysForCurrency(USD)
+                .validatePeriodCount(USD)
+                .validateExpectedDays(USD)
                 .validatePeriodsAreInAscendingDayOrder(USD)
                 .validateAllForwardRateFieldsAreNotNull(USD)
-                .validateIsoCodesInsideForwardRates(USD)
+                .validateIso1InsideRatesEquals(USD)
+                .validateIso2InsideRatesIsGel(USD)
                 .validateAskRateIsAlwaysGreaterThanBidRate(USD)
                 .validateAskPointIsAlwaysGreaterThanBidPoint(USD)
                 .validateAskInterestIsAlwaysGreaterThanBidInterest(USD)
                 .validateForwardRatesArePositive(USD)
-                .validateForwardPointsArePositive(USD)
+                .validateForwardPointsAreNonNegative(USD)
                 .validateForwardInterestRatesAreWithinRange(USD)
-                .validateBidForwardRatesIncreaseOverTime(USD)
-                .validateAskForwardRatesIncreaseOverTime(USD);
+                .validateBidRatesIncreaseOverTime(USD)
+                .validateAskRatesIncreaseOverTime(USD);
     }
 
-    @Test(description = "TC-FR-38: Verify forward rates response time is under 3000ms")
-    public void forwardRatesResponseTimeTest() {
-        new ForwardRateSteps()
-                .fetchForwardRates(KA_GE)
-                .validateResponseTimeIsUnder(3000);
-    }
-
-    @Test(description = "TC-FR-39: Verify request with invalid locale returns 4xx or fallback response")
+    @Test(description = "Invalid locale returns 4xx")
     public void invalidLocaleReturnsErrorTest() {
         new ForwardRateSteps()
-                .fetchForwardRatesExpectingError("xx-XX", 400);
+                .fetchForwardRatesExpectingError("xx-XX", 400)
+                .validateStatusCode(400);
     }
 
-    @Test(description = "TC-FR-40: Verify request with empty locale string returns 4xx error")
+    @Test(description = "Empty locale string returns 4xx")
     public void emptyLocaleReturnsErrorTest() {
         new ForwardRateSteps()
-                .fetchForwardRatesExpectingError("", 400);
+                .fetchForwardRatesExpectingError("", 400)
+                .validateStatusCode(400);
     }
 
-    @Test(description = "TC-FR-41: Verify request with no locale parameter still returns a valid response")
+    @Test(description = "No locale parameter still returns a valid response")
     public void noLocaleParamReturnsValidResponseTest() {
         new ForwardRateSteps()
                 .fetchForwardRatesNoParams()
                 .validateStatusCode(200);
     }
 
-    @Test(description = "TC-FR-42: Verify request with en-US locale returns valid response")
+    @Test(description = "en-US locale returns valid response")
     public void enUsLocaleReturnsValidResponseTest() {
         new ForwardRateSteps()
                 .fetchForwardRates(EN_US)
@@ -338,16 +353,17 @@ public class ForwardRateTests {
                 .validateRatesListIsNotEmpty();
     }
 
-    @Test(description = "TC-FR-43: Verify request with numeric locale value returns 4xx error")
+    @Test(description = "Numeric locale value returns 4xx")
     public void numericLocaleReturnsErrorTest() {
         new ForwardRateSteps()
-                .fetchForwardRatesExpectingError("12345", 400);
+                .fetchForwardRatesExpectingError("12345", 400)
+                .validateStatusCode(400);
     }
 
-    @Test(description = "TC-FR-44: Verify request with SQL injection in locale param is handled safely")
+    @Test(description = "SQL injection in locale param is handled safely")
     public void sqlInjectionLocaleIsHandledSafelyTest() {
         new ForwardRateSteps()
-                .fetchForwardRatesExpectingError("'; DROP TABLE rates; --", 400);
+                .fetchForwardRatesExpectingError("'; DROP TABLE rates; --", 400)
+                .validateStatusCode(400);
     }
 }
-

@@ -8,7 +8,7 @@ import ge.tbc.testautomation.tbcbankapp.ui.utils.ConsumerLoanHelper;
 
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static ge.tbc.testautomation.tbcbankapp.ui.data.Constants.CONSUMER_LOAN_DIGITAL_URL;
+import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.CONSUMER_LOAN_DIGITAL_URL;
 
 public class ConsumerLoanSteps {
 

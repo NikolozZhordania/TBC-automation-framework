@@ -3,8 +3,8 @@ package ge.tbc.testautomation.tbcbankapp.ui.tests;
 import ge.tbc.testautomation.tbcbankapp.ui.base.BaseDeviceTest;
 import org.testng.annotations.Test;
 
-import static ge.tbc.testautomation.tbcbankapp.ui.data.Constants.TRANSFER_AMOUNT;
-import static ge.tbc.testautomation.tbcbankapp.ui.data.Constants.TRANSFER_COUNTRY;
+import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.TRANSFER_AMOUNT;
+import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.TRANSFER_COUNTRY;
 
 @Test(description = "DEV-T3 Validate Money Transfer Options")
 public class MoneyTransferTest extends BaseDeviceTest {

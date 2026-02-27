@@ -7,7 +7,7 @@ import ge.tbc.testautomation.tbcbankapp.ui.pages.LocationsPage;
 import ge.tbc.testautomation.tbcbankapp.ui.utils.LocationHelper;
 import org.json.JSONArray;
 
-import static ge.tbc.testautomation.tbcbankapp.ui.data.Constants.LOCATIONS_PAGE_URL;
+import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.LOCATIONS_PAGE_URL;
 import static ge.tbc.testautomation.tbcbankapp.ui.utils.GeoCodeUtils.addressComponentExists;
 import static org.testng.Assert.*;
 

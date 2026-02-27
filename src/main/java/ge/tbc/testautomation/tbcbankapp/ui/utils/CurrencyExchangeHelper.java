@@ -7,9 +7,6 @@ import java.util.regex.Pattern;
 
 import static org.testng.Assert.assertTrue;
 
-/**
- * Helper class for currency exchange calculations and parsing
- */
 public class CurrencyExchangeHelper {
 
     private final CurrencyExchangePage currencyExchangePage;

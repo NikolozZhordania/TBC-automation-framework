@@ -2,6 +2,7 @@
 <suite name="TBC Bank UI Enterprise" parallel="false" preserve-order="true" verbose="1">
 
     <!-- ================= CHROMIUM ================= -->
+
     <test name="Chromium-ConsumerLoanCalculatorTest" parallel="instances" thread-count="2" preserve-order="true">
         <parameter name="browser" value="chromium"/>
         <parameter name="testClass" value="ge.tbc.testautomation.tbcbankapp.tests.ConsumerLoanCalculatorTest"/>

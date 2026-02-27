@@ -21,15 +21,14 @@ public class ExchangeRateSteps {
                 .statusCode(200)
                 .extract()
                 .as(ExchangeRateResponse.class);
-        System.out.printf("Fetched exchange rate: %s/%s - Buy: %.4f, Sell: %.4f%n",
+        System.out.printf("Fetched %s/%s — buy: %.4f, sell: %.4f%n",
                 iso1, iso2, exchangeRate.getBuyRate(), exchangeRate.getSellRate());
         return this;
     }
 
     public ExchangeRateSteps fetchExchangeRateExpectingError(String iso1, String iso2, int expectedStatusCode) {
         this.rawResponse = api.getExchangeRate(iso1, iso2);
-        rawResponse.then().statusCode(expectedStatusCode);
-        System.out.printf("Received expected status %d for %s/%s%n", expectedStatusCode, iso1, iso2);
+        System.out.printf("Received %d for %s/%s%n", rawResponse.statusCode(), iso1, iso2);
         return this;
     }
 
@@ -49,40 +48,76 @@ public class ExchangeRateSteps {
     }
 
     public ExchangeRateSteps validateStatusCode(int expectedCode) {
-        assertThat("Status code mismatch", rawResponse.statusCode(), equalTo(expectedCode));
+        assertThat("Status code", rawResponse.statusCode(), equalTo(expectedCode));
         return this;
     }
 
     public ExchangeRateSteps validateContentTypeIsJson() {
-        assertThat("Content-Type should be JSON",
-                rawResponse.contentType(), containsString("application/json"));
+        assertThat("Content-Type", rawResponse.contentType(), containsString("application/json"));
         return this;
     }
 
-    public ExchangeRateSteps validateResponseFieldsAreNotNull() {
+    public ExchangeRateSteps validateResponseTimeIsUnder(long maxMillis) {
+        assertThat(
+                String.format("Response time %dms exceeds limit of %dms", rawResponse.getTime(), maxMillis),
+                rawResponse.getTime(), lessThan(maxMillis)
+        );
+        return this;
+    }
+
+    public ExchangeRateSteps validateIso1IsPresent() {
         assertThat("iso1 must not be null", exchangeRate.getIso1(), notNullValue());
+        return this;
+    }
+
+    public ExchangeRateSteps validateIso2IsPresent() {
         assertThat("iso2 must not be null", exchangeRate.getIso2(), notNullValue());
+        return this;
+    }
+
+    public ExchangeRateSteps validateBuyRateIsPresent() {
         assertThat("buyRate must not be null", exchangeRate.getBuyRate(), notNullValue());
+        return this;
+    }
+
+    public ExchangeRateSteps validateSellRateIsPresent() {
         assertThat("sellRate must not be null", exchangeRate.getSellRate(), notNullValue());
+        return this;
+    }
+
+    public ExchangeRateSteps validateConversionTypeIsPresent() {
         assertThat("conversionType must not be null", exchangeRate.getConversionType(), notNullValue());
+        return this;
+    }
+
+    public ExchangeRateSteps validateCurrencyWeightIsPresent() {
         assertThat("currencyWeight must not be null", exchangeRate.getCurrencyWeight(), notNullValue());
+        return this;
+    }
+
+    public ExchangeRateSteps validateUpdateDateIsPresent() {
         assertThat("updateDate must not be null", exchangeRate.getUpdateDate(), notNullValue());
         return this;
     }
 
-    public ExchangeRateSteps validateIsoCurrencyCodes(String expectedIso1, String expectedIso2) {
-        assertThat("iso1 should match requested currency", exchangeRate.getIso1(), equalToIgnoringCase(expectedIso1));
-        assertThat("iso2 should match requested currency", exchangeRate.getIso2(), equalToIgnoringCase(expectedIso2));
+    // Convenience composite — all fields present in one call
+    public ExchangeRateSteps validateAllFieldsArePresent() {
+        return validateIso1IsPresent()
+                .validateIso2IsPresent()
+                .validateBuyRateIsPresent()
+                .validateSellRateIsPresent()
+                .validateConversionTypeIsPresent()
+                .validateCurrencyWeightIsPresent()
+                .validateUpdateDateIsPresent();
+    }
+
+    public ExchangeRateSteps validateIso1Equals(String expected) {
+        assertThat("iso1", exchangeRate.getIso1(), equalToIgnoringCase(expected));
         return this;
     }
 
-    public ExchangeRateSteps validateIso1IsUSD() {
-        assertThat("iso1 should be USD", exchangeRate.getIso1(), equalTo(CurrencyPairs.USD));
-        return this;
-    }
-
-    public ExchangeRateSteps validateIso2IsGEL() {
-        assertThat("iso2 should be GEL", exchangeRate.getIso2(), equalTo(CurrencyPairs.GEL));
+    public ExchangeRateSteps validateIso2Equals(String expected) {
+        assertThat("iso2", exchangeRate.getIso2(), equalToIgnoringCase(expected));
         return this;
     }
 
@@ -97,36 +132,36 @@ public class ExchangeRateSteps {
     }
 
     public ExchangeRateSteps validateSellRateIsGreaterThanBuyRate() {
-        assertThat("sellRate must be greater than buyRate (bank margin)",
+        assertThat("sellRate must exceed buyRate (bank spread)",
                 exchangeRate.getSellRate(), greaterThan(exchangeRate.getBuyRate()));
         return this;
     }
 
     public ExchangeRateSteps validateBuyRateIsWithinReasonableRange() {
-        assertThat("buyRate should be within reasonable bounds",
-                exchangeRate.getBuyRate(), greaterThanOrEqualTo(ExpectedValues.USD_GEL_BUY_RATE_MIN));
-        assertThat("buyRate should not exceed reasonable ceiling",
-                exchangeRate.getBuyRate(), lessThanOrEqualTo(ExpectedValues.USD_GEL_BUY_RATE_MAX));
+        assertThat("buyRate below floor", exchangeRate.getBuyRate(),
+                greaterThanOrEqualTo(ExpectedValues.USD_GEL_BUY_RATE_MIN));
+        assertThat("buyRate above ceiling", exchangeRate.getBuyRate(),
+                lessThanOrEqualTo(ExpectedValues.USD_GEL_BUY_RATE_MAX));
         return this;
     }
 
     public ExchangeRateSteps validateSellRateIsWithinReasonableRange() {
-        assertThat("sellRate should be within reasonable bounds",
-                exchangeRate.getSellRate(), greaterThanOrEqualTo(ExpectedValues.USD_GEL_SELL_RATE_MIN));
-        assertThat("sellRate should not exceed reasonable ceiling",
-                exchangeRate.getSellRate(), lessThanOrEqualTo(ExpectedValues.USD_GEL_SELL_RATE_MAX));
+        assertThat("sellRate below floor", exchangeRate.getSellRate(),
+                greaterThanOrEqualTo(ExpectedValues.USD_GEL_SELL_RATE_MIN));
+        assertThat("sellRate above ceiling", exchangeRate.getSellRate(),
+                lessThanOrEqualTo(ExpectedValues.USD_GEL_SELL_RATE_MAX));
         return this;
     }
 
     public ExchangeRateSteps validateConversionType() {
-        assertThat("conversionType should be 2",
-                exchangeRate.getConversionType(), equalTo(ExpectedValues.EXPECTED_CONVERSION_TYPE));
+        assertThat("conversionType", exchangeRate.getConversionType(),
+                equalTo(ExpectedValues.EXPECTED_CONVERSION_TYPE));
         return this;
     }
 
     public ExchangeRateSteps validateCurrencyWeight() {
-        assertThat("currencyWeight should be 1.0",
-                exchangeRate.getCurrencyWeight(), equalTo(ExpectedValues.EXPECTED_CURRENCY_WEIGHT));
+        assertThat("currencyWeight", exchangeRate.getCurrencyWeight(),
+                equalTo(ExpectedValues.EXPECTED_CURRENCY_WEIGHT));
         return this;
     }
 
@@ -136,16 +171,9 @@ public class ExchangeRateSteps {
     }
 
     public ExchangeRateSteps validateUpdateDateFormat() {
-        // Validates ISO 8601 datetime format
-        assertThat("updateDate should match ISO 8601 format",
-                exchangeRate.getUpdateDate(), matchesPattern("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.*"));
-        return this;
-    }
-
-    public ExchangeRateSteps validateResponseTimeIsUnder(long maxMillis) {
-        long responseTime = rawResponse.getTime();
-        assertThat(String.format("Response time %d ms should be under %d ms", responseTime, maxMillis),
-                responseTime, lessThan(maxMillis));
+        assertThat("updateDate ISO 8601 format",
+                exchangeRate.getUpdateDate(),
+                matchesPattern("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.*"));
         return this;
     }
 }

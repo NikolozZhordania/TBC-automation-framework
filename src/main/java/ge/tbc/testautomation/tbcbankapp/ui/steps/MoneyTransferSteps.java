@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static ge.tbc.testautomation.tbcbankapp.ui.data.Constants.MONEY_TRANSFER_PAGE_URL;
+import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.MONEY_TRANSFER_PAGE_URL;
 
 public class MoneyTransferSteps {
 

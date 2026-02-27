@@ -7,7 +7,7 @@ import ge.tbc.testautomation.tbcbankapp.ui.utils.DeviceType;
 import ge.tbc.testautomation.tbcbankapp.ui.utils.TestContext;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static ge.tbc.testautomation.tbcbankapp.ui.data.Constants.APP_URL;
+import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.APP_URL;
 
 public class HomeSteps {
 

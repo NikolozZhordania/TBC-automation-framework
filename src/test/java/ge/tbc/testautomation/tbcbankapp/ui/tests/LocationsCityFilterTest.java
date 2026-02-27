@@ -3,7 +3,7 @@ package ge.tbc.testautomation.tbcbankapp.ui.tests;
 import ge.tbc.testautomation.tbcbankapp.ui.base.BaseDeviceTest;
 import org.testng.annotations.Test;
 
-import static ge.tbc.testautomation.tbcbankapp.ui.data.Constants.CITY_NAME;
+import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.CITY_NAME;
 
 @Test(description = "DEV-T5: Filter Available ATM Locations by Selected City")
 public class LocationsCityFilterTest extends BaseDeviceTest {

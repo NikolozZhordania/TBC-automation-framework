@@ -6,7 +6,7 @@ import ge.tbc.testautomation.tbcbankapp.ui.pages.CurrencyExchangePage;
 import ge.tbc.testautomation.tbcbankapp.ui.utils.CurrencyExchangeHelper;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static ge.tbc.testautomation.tbcbankapp.ui.data.Constants.CURRENCY_EXCHANGE_PAGE_URL;
+import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.CURRENCY_EXCHANGE_PAGE_URL;
 
 public class CurrencyExchangeSteps {
 

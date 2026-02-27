@@ -1,4 +1,4 @@
-package ge.tbc.testautomation.tbcbankapp.ui.data;
+package ge.tbc.testautomation.tbcbankapp.ui.data.constants;
 
 public class Constants {
 

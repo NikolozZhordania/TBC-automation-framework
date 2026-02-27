@@ -1,0 +1,24 @@
+{
+  "name": "tbcbank",
+  "version": "1.0.0",
+  "description": "---",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NikolozZhordania/TBCBank-Final-Project-II.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/NikolozZhordania/TBCBank-Final-Project-II/issues"
+  },
+  "homepage": "https://github.com/NikolozZhordania/TBCBank-Final-Project-II#readme",
+  "dependencies": {
+    "backstopjs": "^6.3.25"
+  }
+}

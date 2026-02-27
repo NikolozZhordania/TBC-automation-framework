@@ -4,7 +4,7 @@ import com.microsoft.playwright.Page;
 import ge.tbc.testautomation.tbcbankapp.ui.pages.ConsumerLoanOverviewPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static ge.tbc.testautomation.tbcbankapp.ui.data.Constants.CONSUMER_LOAN_URL;
+import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.CONSUMER_LOAN_URL;
 
 public class ConsumerLoanOverviewSteps {
 

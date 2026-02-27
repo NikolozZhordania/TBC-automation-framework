@@ -3,7 +3,7 @@ package ge.tbc.testautomation.tbcbankapp.ui.tests;
 import ge.tbc.testautomation.tbcbankapp.ui.base.BaseDeviceTest;
 import org.testng.annotations.Test;
 
-import static ge.tbc.testautomation.tbcbankapp.ui.data.Constants.*;
+import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.*;
 
 @Test(description = "DEV-T2 Verify Currency Conversion Rates")
 public class CurrencyExchangeTest extends BaseDeviceTest {
