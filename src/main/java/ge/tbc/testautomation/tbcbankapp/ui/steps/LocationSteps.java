@@ -10,6 +10,8 @@ import org.json.JSONArray;
 
 import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.URLs.*;
 import static ge.tbc.testautomation.tbcbankapp.ui.utils.GeoCodeUtils.addressComponentExists;
+import static ge.tbc.testautomation.tbcbankapp.ui.utils.LocatorHelpers.atmOption;
+import static ge.tbc.testautomation.tbcbankapp.ui.utils.LocatorHelpers.cityOption;
 import static org.testng.Assert.*;
 
 public class LocationSteps {
@@ -101,7 +103,7 @@ public class LocationSteps {
 
     @Step("Wait for city option: {city}")
     public LocationSteps waitForCityOption(String city) {
-        Locator cityOption = locationsPage.cityOption(city);
+        Locator cityOption = cityOption(page, city);
         cityOption.waitFor(new Locator.WaitForOptions()
                 .setState(WaitForSelectorState.VISIBLE)
                 .setTimeout(10000));
@@ -110,7 +112,7 @@ public class LocationSteps {
 
     @Step("Click city option: {city}")
     public LocationSteps clickCityOption(String city) {
-        Locator cityOption = locationsPage.cityOption(city);
+        Locator cityOption = cityOption(page, city);
         cityOption.click();
         return this;
     }
@@ -198,14 +200,14 @@ public class LocationSteps {
 
     @Step("Scroll to ATM: {atmName}")
     public LocationSteps scrollToATM(String atmName) {
-        Locator atm = locationsPage.atmOption(atmName).first();
+        Locator atm = atmOption(locationsPage.atmListItems, atmName).first();
         atm.scrollIntoViewIfNeeded();
         return this;
     }
 
     @Step("Click ATM: {atmName}")
     public LocationSteps clickATM(String atmName) {
-        Locator atm = locationsPage.atmOption(atmName).first();
+        Locator atm = atmOption(locationsPage.atmListItems, atmName).first();
         atm.click();
         return this;
     }

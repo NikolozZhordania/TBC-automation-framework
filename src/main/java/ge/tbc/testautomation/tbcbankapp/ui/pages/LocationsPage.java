@@ -47,12 +47,4 @@ public class LocationsPage extends CommonPage {
         this.currentUserLocation = page.locator("gmp-advanced-marker.internal-visible");
 
     }
-
-    public Locator cityOption(String city) {
-        return page.getByRole(AriaRole.BUTTON).getByText(city);
-    }
-
-    public Locator atmOption(String atmName) {
-        return atmListItems.filter(new Locator.FilterOptions().setHasText(atmName)).first();
-    }
 }

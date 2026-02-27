@@ -6,7 +6,6 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import org.testng.annotations.Test;
 
-import static ge.tbc.testautomation.tbcbankapp.api.data.constants.PagesConstants.ExpectedValues.*;
 import static ge.tbc.testautomation.tbcbankapp.api.data.constants.PagesConstants.PageIds.*;
 import static ge.tbc.testautomation.tbcbankapp.api.data.constants.PagesConstants.SeoTitles.*;
 

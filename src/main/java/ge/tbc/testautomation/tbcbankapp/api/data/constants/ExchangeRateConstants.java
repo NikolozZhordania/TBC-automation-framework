@@ -12,7 +12,14 @@ public class ExchangeRateConstants {
 
     public static class Endpoints {
         public static final String GET_EXCHANGE_RATE = "/exchangeRates/getExchangeRate";
+        public static final String GET_COMMERCIAL_LIST = "/exchangeRates/commercialList";
     }
+
+    public static class QueryParams {
+        public static final String LOCALE    = "locale";
+        public static final String LOCALE_KA = "ka-GE";
+    }
+
 
     public static class Params {
         public static final String ISO1 = "Iso1";

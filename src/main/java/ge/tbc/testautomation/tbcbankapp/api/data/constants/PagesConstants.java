@@ -32,8 +32,4 @@ public class PagesConstants {
         public static final String TREASURY_PRODUCTS_KA = "სახაზინო პროდუქტები";
     }
 
-    public static class ExpectedValues {
-        public static final int EXPECTED_STATUS_200 = 200;
-        public static final int EXPECTED_STATUS_400 = 400;
-    }
 }

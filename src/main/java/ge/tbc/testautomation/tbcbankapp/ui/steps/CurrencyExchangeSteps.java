@@ -4,10 +4,12 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Locator;
 import ge.tbc.testautomation.tbcbankapp.ui.pages.CurrencyExchangePage;
 import ge.tbc.testautomation.tbcbankapp.ui.utils.CurrencyExchangeHelper;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static ge.tbc.testautomation.tbcbankapp.ui.data.constants.Constants.URLs.*;
+import static org.hamcrest.Matchers.equalTo;
 
 public class CurrencyExchangeSteps {
 
@@ -104,6 +106,22 @@ public class CurrencyExchangeSteps {
         double uiCalculatedRate = currencyExchangeHelper.getUiCalculatedRate();
         double normalizedRate = currencyExchangeHelper.getNormalizedRate(uiCalculatedRate, currentRate);
         currencyExchangeHelper.assertRateWithinTolerance(uiCalculatedRate, normalizedRate);
+        return this;
+    }
+
+    @Step("Get commercial currency section title from UI")
+    public String getCommercialSectionTitle() {
+        assertThat(currencyExchangePage.pageHeader).isVisible();
+        return currencyExchangePage.pageHeader.innerText().trim();
+    }
+
+    @Step("Assert UI commercial section title matches API popularCurrencyTitle")
+    public CurrencyExchangeSteps assertCommercialSectionTitleMatchesApi(String apiTitle) {
+        String uiTitle = getCommercialSectionTitle();
+        Allure.addAttachment("API Title", apiTitle);
+        Allure.addAttachment("UI Title", uiTitle);
+        org.hamcrest.MatcherAssert.assertThat("popularCurrencyTitle mismatch between Pages API and UI",
+                uiTitle, equalTo(apiTitle));
         return this;
     }
 }

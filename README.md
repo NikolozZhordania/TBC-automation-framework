@@ -315,7 +315,6 @@ backstop test --config=backstop.json
 **Fragility:** City filter + geocode validation in a single step on mobile is more fragile due to slower rendering and smaller viewport causing map markers to fall outside the visible area.
 
 **Mitigation:**
-- `scrollIntoViewIfNeeded()` before clicking ATM items.
 - Increased timeouts for map-related assertions on mobile.
 
 ---

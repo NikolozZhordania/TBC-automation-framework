@@ -4,8 +4,9 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 
-public class ConsumerLoanPage extends CommonPage {
+import static ge.tbc.testautomation.tbcbankapp.ui.utils.LocatorHelpers.getValueByLabelAndSymbol;
 
+public class ConsumerLoanPage extends CommonPage {
     public Locator
             pageHeader,
             moneyAmountInput,
@@ -45,10 +46,4 @@ public class ConsumerLoanPage extends CommonPage {
                 page.locator("//div[contains(@class,'tbcx-pw-calculated-info__number') and not(contains(@class,'--old'))]");
     }
 
-    private Locator getValueByLabelAndSymbol(Page page, String labelText, String symbol) {
-        return page.locator("div")
-                .filter(new Locator.FilterOptions().setHasText(labelText))
-                .locator("xpath=following-sibling::div[contains(text(),'" + symbol + "')]")
-                .first();
-    }
 }
