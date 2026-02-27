@@ -28,11 +28,6 @@
             <version>7.11.0</version>
         </dependency>
         <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-            <version>12.6.1.jre11</version>
-        </dependency>
-        <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>5.5.6</version>
@@ -101,7 +96,6 @@
             <version>20230227</version>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
