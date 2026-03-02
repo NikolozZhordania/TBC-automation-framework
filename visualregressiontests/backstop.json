@@ -1,0 +1,41 @@
+{
+  "id": "money_transfer_visual_regression",
+  "viewports": [
+    { "label": "desktop", "width": 1920, "height": 1080 },
+    { "label": "mobile", "width": 390, "height": 844 }
+  ],
+  "scenarios": [
+    {
+      "label": "DEV-T3 Validate Money Transfer Options",
+      "url": "https://tbcbank.ge/",
+      "delay": 1000,
+      "readySelector": "body",
+      "onReadyScript": "moneyTransferTest.js",
+      "selectors": [
+        "tbcx-pw-money-transfer-system-card",
+        "tbcx-pw-money-transfer-fee-calculator",
+        "div.tbcx-pw-money-transfer-fee-calculator__cards"
+      ],
+      "selectorExpansion": true,
+      "misMatchThreshold": 0.15,
+      "requireSameDimensions": false
+    }
+  ],
+  "paths": {
+    "bitmaps_reference": "backstop_data/bitmaps_reference",
+    "bitmaps_test": "backstop_data/bitmaps_test",
+    "engine_scripts": "backstop_data/engine_scripts",
+    "html_report": "backstop_data/html_report",
+    "ci_report": "backstop_data/ci_report"
+  },
+  "report": ["browser"],
+  "engine": "playwright",
+  "engineOptions": {
+    "browser": "chromium",
+    "args": ["--no-sandbox", "--disable-setuid-sandbox"]
+  },
+  "asyncCaptureLimit": 5,
+  "asyncCompareLimit": 50,
+  "debug": false,
+  "debugWindow": false
+}

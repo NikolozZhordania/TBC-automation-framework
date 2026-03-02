@@ -1,0 +1,15 @@
+target/
+.idea/
+*.iml
+build/
+allure-results/
+allure-report/
+target/allure-results/
+target/allure-report/
+/visualregressiontests/backstop_data/html_report/
+/visualregressiontests/backstop_data/bitmaps_test/20260227-020650/
+/visualregressiontests/backstop_data/bitmaps_test/20260227-020735/
+/visualregressiontests/backstop_data/bitmaps_test/20260227-021314/
+/node_modules/
+/visualregressiontests/backstop_data/bitmaps_reference/
+/visualregressiontests/backstop_data/bitmaps_test/
